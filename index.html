@@ -1,0 +1,1725 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Organize suas finanças pessoais com a estratégia dos Potinhos - Regra 50-30-20. Controle seus gastos de forma visual e intuitiva.">
+    <meta name="keywords" content="finanças pessoais, controle financeiro, orçamento, 50-30-20, potinhos">
+    <title>Meu Dinheiro por Potinhos - Organize suas Finanças</title>
+    
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- Lucide Icons -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+    
+    <!-- html2canvas para captura de tela -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+    
+    <!-- jsPDF para gerar PDF -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    
+    <style>
+        @keyframes slideIn {
+            from { opacity: 0; transform: translateY(-20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        @keyframes pulse-scale {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.1); }
+        }
+        
+        .animate-slide-in {
+            animation: slideIn 0.5s ease-out;
+        }
+        
+        .animate-pulse-scale {
+            animation: pulse-scale 2s infinite;
+        }
+        
+        .progress-bar {
+            transition: width 0.6s ease-out, background-color 0.3s ease;
+        }
+        
+        .pot-card {
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+        
+        .pot-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1);
+        }
+        
+        .fade-in {
+            animation: fadeIn 0.3s ease-in;
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+        
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+        
+        .animate-spin {
+            animation: spin 1s linear infinite;
+        }
+        
+        /* Slider customizado */
+        .slider::-webkit-slider-thumb {
+            appearance: none;
+            width: 24px;
+            height: 24px;
+            background: linear-gradient(135deg, #a855f7 0%, #ec4899 100%);
+            cursor: pointer;
+            border-radius: 50%;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+            transition: transform 0.2s ease;
+        }
+        
+        .slider::-webkit-slider-thumb:hover {
+            transform: scale(1.2);
+        }
+        
+        .slider::-moz-range-thumb {
+            width: 24px;
+            height: 24px;
+            background: linear-gradient(135deg, #a855f7 0%, #ec4899 100%);
+            cursor: pointer;
+            border-radius: 50%;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+            border: none;
+            transition: transform 0.2s ease;
+        }
+        
+        .slider::-moz-range-thumb:hover {
+            transform: scale(1.2);
+        }
+        
+        .slider::-webkit-slider-runnable-track {
+            background: linear-gradient(to right, 
+                #10b981 0%, 
+                #3b82f6 33%, 
+                #a855f7 66%, 
+                #ec4899 100%);
+            height: 12px;
+            border-radius: 6px;
+        }
+        
+        .slider::-moz-range-track {
+            background: linear-gradient(to right, 
+                #10b981 0%, 
+                #3b82f6 33%, 
+                #a855f7 66%, 
+                #ec4899 100%);
+            height: 12px;
+            border-radius: 6px;
+        }
+    </style>
+</head>
+<body class="bg-gradient-to-br from-indigo-50 via-purple-50 to-pink-50 min-h-screen">
+    
+    <!-- Header -->
+    <header class="bg-white shadow-lg animate-slide-in">
+        <div class="container mx-auto px-4 py-6">
+            <div class="flex items-center justify-between">
+                <div class="flex items-center space-x-3">
+                    <div class="bg-gradient-to-r from-purple-500 to-pink-500 p-3 rounded-full">
+                        <i data-lucide="piggy-bank" class="text-white" size="32"></i>
+                    </div>
+                    <div>
+                        <h1 class="text-3xl font-bold bg-gradient-to-r from-purple-600 to-pink-600 bg-clip-text text-transparent">
+                            Meu Dinheiro por Potinhos
+                        </h1>
+                        <p class="text-gray-600 text-sm">Organize suas finanças de forma inteligente</p>
+                    </div>
+                </div>
+                <div class="flex space-x-2">
+                    <button id="resetBtn" class="bg-red-500 hover:bg-red-600 text-white px-4 py-2 rounded-lg flex items-center space-x-2 transition" title="Reiniciar dados">
+                        <i data-lucide="refresh-ccw" size="20"></i>
+                        <span class="hidden md:inline">Reiniciar</span>
+                    </button>
+                    <button id="exportBtn" class="bg-green-500 hover:bg-green-600 text-white px-4 py-2 rounded-lg flex items-center space-x-2 transition">
+                        <i data-lucide="share-2" size="20"></i>
+                        <span>Exportar</span>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <main class="container mx-auto px-4 py-8">
+        
+        <!-- Configuração de Renda -->
+        <section class="bg-white rounded-2xl shadow-xl p-6 mb-8 animate-slide-in">
+            <div class="flex items-center space-x-3 mb-4">
+                <i data-lucide="wallet" class="text-purple-500" size="28"></i>
+                <h2 class="text-2xl font-bold text-gray-800">Renda Mensal</h2>
+            </div>
+            <div class="flex flex-col md:flex-row gap-4">
+                <div class="flex-1">
+                    <label class="block text-sm font-medium text-gray-700 mb-2">Salário/Renda Total</label>
+                    <div class="relative">
+                        <span class="absolute left-3 top-3.5 text-gray-500 font-bold text-base">R$</span>
+                        <input 
+                            type="text" 
+                            id="incomeInput" 
+                            placeholder="0,00" 
+                            class="w-full pl-12 pr-4 py-3 border-2 border-gray-300 rounded-lg focus:border-purple-500 focus:outline-none text-base h-12"
+                        >
+                    </div>
+                </div>
+                <div class="flex items-end">
+                    <button id="saveIncomeBtn" class="bg-gradient-to-r from-purple-500 to-pink-500 hover:from-purple-600 hover:to-pink-600 text-white px-6 py-3 rounded-lg font-semibold transition flex items-center space-x-2 h-12">
+                        <i data-lucide="save" size="20"></i>
+                        <span>Salvar Renda</span>
+                    </button>
+                </div>
+            </div>
+            
+            <!-- Display Total -->
+            <div class="mt-4 grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div class="p-4 bg-gradient-to-r from-purple-100 to-pink-100 rounded-lg">
+                    <p class="text-sm text-gray-700 mb-1">Renda Total Configurada:</p>
+                    <p class="text-3xl font-bold text-purple-700" id="totalIncomeDisplay">R$ 0,00</p>
+                </div>
+                <div class="p-4 bg-gradient-to-r from-blue-100 to-indigo-100 rounded-lg">
+                    <p class="text-sm text-gray-700 mb-1">Distribuição dos Potinhos:</p>
+                    <p class="text-3xl font-bold" id="totalDistributionDisplay">0%</p>
+                    <div class="w-full bg-white rounded-full h-2 mt-2">
+                        <div id="distributionBar" class="h-full rounded-full transition-all" style="width: 0%"></div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Gerenciar Potinhos -->
+        <section class="bg-white rounded-2xl shadow-xl p-6 mb-8 animate-slide-in">
+            <div class="flex items-center justify-between mb-4">
+                <div class="flex items-center space-x-3">
+                    <i data-lucide="grid-3x3" class="text-indigo-500" size="28"></i>
+                    <h2 class="text-2xl font-bold text-gray-800">Meus Potinhos</h2>
+                </div>
+                <button id="addPotBtn" class="bg-indigo-500 hover:bg-indigo-600 text-white px-4 py-2 rounded-lg flex items-center space-x-2 transition">
+                    <i data-lucide="plus-circle" size="20"></i>
+                    <span>Novo Potinho</span>
+                </button>
+            </div>
+            
+            <div id="potsContainer" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                <!-- Os potinhos serão renderizados aqui -->
+            </div>
+        </section>
+
+        <!-- Espaço para Anúncio -->
+        <div class="bg-gray-200 rounded-lg p-8 mb-8 text-center">
+            <p class="text-gray-500 text-sm">Espaço Publicitário</p>
+            <p class="text-gray-400 text-xs mt-2"><!-- Ad Placeholder 728x90 --></p>
+        </div>
+
+        <!-- Lançamento de Gastos -->
+        <section class="bg-white rounded-2xl shadow-xl p-6 mb-8 animate-slide-in">
+            <div class="flex items-center space-x-3 mb-4">
+                <i data-lucide="receipt" class="text-red-500" size="28"></i>
+                <h2 class="text-2xl font-bold text-gray-800">Adicionar Gasto</h2>
+            </div>
+            
+            <form id="expenseForm" class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-2">Descrição</label>
+                    <input 
+                        type="text" 
+                        id="expenseDescription" 
+                        placeholder="Ex: Mercado, Cinema..." 
+                        class="w-full px-4 py-3 border-2 border-gray-300 rounded-lg focus:border-red-500 focus:outline-none text-base h-12"
+                        required
+                    >
+                </div>
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-2">Valor</label>
+                    <div class="relative">
+                        <span class="absolute left-3 top-3.5 text-gray-500 font-bold text-base">R$</span>
+                        <input 
+                            type="text" 
+                            id="expenseValue" 
+                            placeholder="0,00"
+                            class="w-full pl-12 pr-4 py-3 border-2 border-gray-300 rounded-lg focus:border-red-500 focus:outline-none text-base h-12"
+                            required
+                        >
+                    </div>
+                </div>
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-2">Potinho</label>
+                    <select 
+                        id="expensePot" 
+                        class="w-full px-4 py-3 border-2 border-gray-300 rounded-lg focus:border-red-500 focus:outline-none text-base h-12"
+                        required
+                    >
+                        <option value="">Selecione...</option>
+                    </select>
+                </div>
+                <div class="md:col-span-3">
+                    <button type="submit" class="w-full bg-gradient-to-r from-red-500 to-orange-500 hover:from-red-600 hover:to-orange-600 text-white py-3 rounded-lg font-semibold transition flex items-center justify-center space-x-2 h-12">
+                        <i data-lucide="plus" size="20"></i>
+                        <span>Adicionar Gasto</span>
+                    </button>
+                </div>
+            </form>
+        </section>
+
+        <!-- Histórico de Gastos -->
+        <section class="bg-white rounded-2xl shadow-xl p-6 mb-8 animate-slide-in">
+            <div class="flex items-center space-x-3 mb-4">
+                <i data-lucide="history" class="text-blue-500" size="28"></i>
+                <h2 class="text-2xl font-bold text-gray-800">Histórico Recente</h2>
+            </div>
+            
+            <div id="expenseHistory" class="space-y-3">
+                <!-- Histórico será renderizado aqui -->
+            </div>
+        </section>
+
+        <!-- Espaço para Anúncio -->
+        <div class="bg-gray-200 rounded-lg p-8 mb-8 text-center">
+            <p class="text-gray-500 text-sm">Espaço Publicitário</p>
+            <p class="text-gray-400 text-xs mt-2"><!-- Ad Placeholder 728x90 --></p>
+        </div>
+
+        <!-- Seção Educativa -->
+        <section class="bg-gradient-to-r from-purple-100 to-pink-100 rounded-2xl shadow-lg p-8 mb-8">
+            <div class="max-w-4xl mx-auto">
+                <h2 class="text-3xl font-bold text-purple-800 mb-6 flex items-center">
+                    <i data-lucide="book-open" class="mr-3" size="32"></i>
+                    Como funciona a estratégia dos Potinhos?
+                </h2>
+                
+                <div class="prose prose-lg text-gray-700 space-y-4 mb-8">
+                    <p>
+                        A <strong>estratégia dos Potinhos</strong> é uma metodologia simples e visual para organizar suas finanças. 
+                        Ela se baseia na famosa <strong>regra 50-30-20</strong>, que divide sua renda em três categorias principais:
+                    </p>
+                    
+                    <div class="grid md:grid-cols-3 gap-6 my-6">
+                        <div class="bg-white p-6 rounded-xl shadow-md">
+                            <div class="text-4xl mb-3">🏠</div>
+                            <h3 class="text-xl font-bold text-green-600 mb-2">50% - Necessidades</h3>
+                            <p class="text-gray-600 text-sm">
+                                Gastos essenciais como moradia, alimentação, transporte, contas básicas e saúde.
+                            </p>
+                        </div>
+                        
+                        <div class="bg-white p-6 rounded-xl shadow-md">
+                            <div class="text-4xl mb-3">🎮</div>
+                            <h3 class="text-xl font-bold text-blue-600 mb-2">30% - Desejos</h3>
+                            <p class="text-gray-600 text-sm">
+                                Lazer, entretenimento, restaurantes, hobbies e compras não essenciais.
+                            </p>
+                        </div>
+                        
+                        <div class="bg-white p-6 rounded-xl shadow-md">
+                            <div class="text-4xl mb-3">💰</div>
+                            <h3 class="text-xl font-bold text-purple-600 mb-2">20% - Futuro</h3>
+                            <p class="text-gray-600 text-sm">
+                                Poupança, investimentos, aposentadoria e pagamento de dívidas.
+                            </p>
+                        </div>
+                    </div>
+                    
+                    <p>
+                        Neste aplicativo, você pode <strong>personalizar seus potinhos</strong>, criar novos, ajustar percentuais 
+                        e acompanhar visualmente quanto já gastou de cada categoria. É uma forma prática de manter suas 
+                        finanças organizadas e evitar surpresas no fim do mês!
+                    </p>
+                </div>
+                
+                <h3 class="text-2xl font-bold text-purple-800 mb-4 flex items-center">
+                    <i data-lucide="lightbulb" class="mr-3" size="28"></i>
+                    Dicas para não estourar seu orçamento mensal
+                </h3>
+                
+                <div class="bg-white rounded-xl shadow-md p-6">
+                    <ul class="space-y-3 text-gray-700">
+                        <li class="flex items-start">
+                            <span class="text-green-500 font-bold mr-3 text-xl">✓</span>
+                            <span><strong>Registre todos os gastos:</strong> Por menor que seja, anote! Pequenas despesas somadas fazem diferença.</span>
+                        </li>
+                        <li class="flex items-start">
+                            <span class="text-green-500 font-bold mr-3 text-xl">✓</span>
+                            <span><strong>Revise semanalmente:</strong> Faça check-ins regulares para ver como está seu progresso.</span>
+                        </li>
+                        <li class="flex items-start">
+                            <span class="text-green-500 font-bold mr-3 text-xl">✓</span>
+                            <span><strong>Priorize o futuro:</strong> Trate a poupança como uma conta obrigatória, não como o que sobra.</span>
+                        </li>
+                        <li class="flex items-start">
+                            <span class="text-green-500 font-bold mr-3 text-xl">✓</span>
+                            <span><strong>Use os alertas visuais:</strong> Quando a barra ficar amarela (90%), reduza os gastos daquele potinho.</span>
+                        </li>
+                        <li class="flex items-start">
+                            <span class="text-green-500 font-bold mr-3 text-xl">✓</span>
+                            <span><strong>Seja flexível:</strong> Ajuste as porcentagens de acordo com sua realidade, mas mantenha a disciplina.</span>
+                        </li>
+                        <li class="flex items-start">
+                            <span class="text-green-500 font-bold mr-3 text-xl">✓</span>
+                            <span><strong>Exporte seus dados:</strong> Faça backups mensais para acompanhar sua evolução ao longo do tempo.</span>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <!-- Footer -->
+    <footer class="bg-gray-800 text-white py-6 mt-12">
+        <div class="container mx-auto px-4 text-center">
+            <p>&copy; 2026 Meu Dinheiro por Potinhos - Organize suas finanças com inteligência</p>
+            <p class="text-gray-400 text-sm mt-2">Seus dados são salvos localmente no seu navegador</p>
+        </div>
+    </footer>
+
+    <!-- Modal para Editar/Criar Potinho -->
+    <div id="potModal" class="hidden fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
+        <div class="bg-white rounded-2xl shadow-2xl max-w-md w-full p-6 animate-slide-in">
+            <div class="flex items-center justify-between mb-4">
+                <h3 class="text-2xl font-bold text-gray-800" id="modalTitle">Editar Potinho</h3>
+                <button id="closeModalBtn" class="text-gray-500 hover:text-gray-700">
+                    <i data-lucide="x" size="24"></i>
+                </button>
+            </div>
+            
+            <form id="potForm" class="space-y-4">
+                <input type="hidden" id="potId">
+                
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-2">Nome do Potinho</label>
+                    <input 
+                        type="text" 
+                        id="potName" 
+                        placeholder="Ex: Viagens" 
+                        class="w-full px-4 py-3 border-2 border-gray-300 rounded-lg focus:border-purple-500 focus:outline-none text-base h-12"
+                        required
+                    >
+                </div>
+                
+                <div>
+                    <div class="bg-gradient-to-r from-purple-50 to-pink-50 rounded-lg p-4 mb-3">
+                        <div class="flex items-center justify-between mb-3">
+                            <div>
+                                <label class="block text-xs font-medium text-gray-600 mb-1">Porcentagem</label>
+                                <div class="text-3xl font-bold text-purple-600" id="percentageValue">0%</div>
+                            </div>
+                            <div class="text-right">
+                                <label class="block text-xs font-medium text-gray-600 mb-1">Valor Alocado</label>
+                                <div id="allocatedValue" class="text-2xl font-bold text-green-600 transition-all">R$ 0,00</div>
+                            </div>
+                        </div>
+                        <div>
+                            <div class="w-full bg-white rounded-full h-2 overflow-hidden shadow-inner">
+                                <div id="potAllocationBar" class="h-full bg-gradient-to-r from-purple-500 to-pink-500 rounded-full transition-all duration-500" style="width: 0%"></div>
+                            </div>
+                            <p class="text-xs text-gray-500 text-center mt-1">
+                                <span id="potAllocationText">0% da renda total</span>
+                            </p>
+                        </div>
+                    </div>
+                    <div id="noIncomeWarning" class="hidden bg-yellow-50 border border-yellow-300 rounded-lg p-3 mb-3">
+                        <p class="text-sm text-yellow-800 flex items-start">
+                            <i data-lucide="info" size="16" class="mr-2 mt-0.5 flex-shrink-0"></i>
+                            <span>⚠️ Configure sua renda mensal primeiro para definir valores e porcentagens para os potinhos.</span>
+                        </p>
+                    </div>
+                    
+                    <!-- Slider -->
+                    <div class="mb-3">
+                        <input 
+                            type="range" 
+                            id="potPercentageSlider" 
+                            min="0"
+                            max="100"
+                            step="0.5"
+                            value="0"
+                            class="w-full h-3 bg-gray-200 rounded-lg appearance-none cursor-pointer slider"
+                        >
+                        <div class="flex justify-between text-xs text-gray-400 mt-1">
+                            <span>0%</span>
+                            <span>25%</span>
+                            <span>50%</span>
+                            <span>75%</span>
+                            <span>100%</span>
+                        </div>
+                    </div>
+                    
+                    <!-- Campo numérico (complementar) -->
+                    <input 
+                        type="number" 
+                        id="potPercentage" 
+                        placeholder="0" 
+                        min="0"
+                        max="100"
+                        step="0.5"
+                        class="w-full px-4 py-3 border-2 border-gray-300 rounded-lg focus:border-purple-500 focus:outline-none text-center text-base h-12"
+                        required
+                    >
+                    
+                    <!-- Feedback de disponibilidade -->
+                    <div class="mt-3 p-3 rounded-lg" id="percentageFeedback">
+                        <div class="flex justify-between items-center text-sm mb-2">
+                            <span class="text-gray-600">Total alocado:</span>
+                            <span id="totalPercentage" class="font-bold text-lg">0%</span>
+                        </div>
+                        <div class="flex justify-between items-center text-sm">
+                            <span class="text-gray-600">Disponível:</span>
+                            <span id="availablePercentage" class="font-bold text-lg text-green-600">100%</span>
+                        </div>
+                        <div class="w-full bg-gray-200 rounded-full h-2 mt-2">
+                            <div id="totalPercentageBar" class="h-full rounded-full transition-all" style="width: 0%"></div>
+                        </div>
+                    </div>
+                    
+                    <p id="percentageWarning" class="hidden text-sm text-red-600 font-semibold mt-2 flex items-center">
+                        <i data-lucide="alert-triangle" size="16" class="mr-1"></i>
+                        <span>A soma dos potinhos não pode ultrapassar 100%!</span>
+                    </p>
+                </div>
+                
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-2">Emoji/Ícone</label>
+                    <input 
+                        type="text" 
+                        id="potIcon" 
+                        placeholder="🏠" 
+                        maxlength="2"
+                        class="w-full px-4 py-3 border-2 border-gray-300 rounded-lg focus:border-purple-500 focus:outline-none text-2xl text-center h-12"
+                    >
+                </div>
+                
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-2">Cor</label>
+                    <div class="grid grid-cols-6 gap-2">
+                        <button type="button" class="color-btn w-10 h-10 rounded-lg bg-green-400 hover:scale-110 transition" data-color="green"></button>
+                        <button type="button" class="color-btn w-10 h-10 rounded-lg bg-blue-400 hover:scale-110 transition" data-color="blue"></button>
+                        <button type="button" class="color-btn w-10 h-10 rounded-lg bg-purple-400 hover:scale-110 transition" data-color="purple"></button>
+                        <button type="button" class="color-btn w-10 h-10 rounded-lg bg-pink-400 hover:scale-110 transition" data-color="pink"></button>
+                        <button type="button" class="color-btn w-10 h-10 rounded-lg bg-yellow-400 hover:scale-110 transition" data-color="yellow"></button>
+                        <button type="button" class="color-btn w-10 h-10 rounded-lg bg-red-400 hover:scale-110 transition" data-color="red"></button>
+                    </div>
+                    <input type="hidden" id="potColor" value="green">
+                </div>
+                
+                <div class="flex space-x-3 pt-4">
+                    <button type="submit" class="flex-1 bg-gradient-to-r from-purple-500 to-pink-500 hover:from-purple-600 hover:to-pink-600 text-white py-3 rounded-lg font-semibold transition">
+                        Salvar
+                    </button>
+                    <button type="button" id="deletePotBtn" class="hidden bg-red-500 hover:bg-red-600 text-white px-4 py-3 rounded-lg transition">
+                        <i data-lucide="trash-2" size="20"></i>
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Modal de Exportação -->
+    <div id="exportModal" class="hidden fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
+        <div class="bg-white rounded-2xl shadow-2xl max-w-lg w-full p-6 animate-slide-in">
+            <div class="flex items-center justify-between mb-4">
+                <h3 class="text-2xl font-bold text-gray-800">Exportar / Compartilhar</h3>
+                <button id="closeExportModalBtn" class="text-gray-500 hover:text-gray-700">
+                    <i data-lucide="x" size="24"></i>
+                </button>
+            </div>
+            
+            <div class="space-y-3">
+                <p class="text-sm text-gray-600 mb-3">Escolha como deseja salvar ou compartilhar seu controle financeiro:</p>
+                
+                <!-- Exportações Visuais (Principais) -->
+                <div class="space-y-2">
+                    <button id="exportPDFBtn" class="w-full bg-gradient-to-r from-red-500 to-orange-500 hover:from-red-600 hover:to-orange-600 text-white py-3 rounded-lg font-semibold transition flex items-center justify-center space-x-2 shadow-md">
+                        <i data-lucide="file-down" size="20"></i>
+                        <span>Baixar como PDF</span>
+                    </button>
+                    
+                    <button id="exportImageBtn" class="w-full bg-gradient-to-r from-purple-500 to-pink-500 hover:from-purple-600 hover:to-pink-600 text-white py-3 rounded-lg font-semibold transition flex items-center justify-center space-x-2 shadow-md">
+                        <i data-lucide="image" size="20"></i>
+                        <span>Salvar como Imagem (PNG)</span>
+                    </button>
+                    
+                    <button id="exportWhatsAppBtn" class="w-full bg-green-500 hover:bg-green-600 text-white py-3 rounded-lg font-semibold transition flex items-center justify-center space-x-2 shadow-md">
+                        <i data-lucide="message-circle" size="20"></i>
+                        <span>Compartilhar no WhatsApp</span>
+                    </button>
+                </div>
+                
+                <!-- Separador -->
+                <div class="relative my-4">
+                    <div class="absolute inset-0 flex items-center">
+                        <div class="w-full border-t border-gray-300"></div>
+                    </div>
+                    <div class="relative flex justify-center text-sm">
+                        <span class="px-2 bg-white text-gray-500">Exportar dados brutos</span>
+                    </div>
+                </div>
+                
+                <!-- Exportações de Dados (Secundárias) -->
+                <div class="grid grid-cols-2 gap-2">
+                    <button id="exportJSONBtn" class="bg-blue-500 hover:bg-blue-600 text-white py-2 rounded-lg font-medium transition flex items-center justify-center space-x-2 text-sm">
+                        <i data-lucide="file-code" size="16"></i>
+                        <span>JSON</span>
+                    </button>
+                    
+                    <button id="exportCSVBtn" class="bg-indigo-500 hover:bg-indigo-600 text-white py-2 rounded-lg font-medium transition flex items-center justify-center space-x-2 text-sm">
+                        <i data-lucide="file-spreadsheet" size="16"></i>
+                        <span>CSV</span>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Loading Overlay para Exportação -->
+    <div id="exportLoading" class="hidden fixed inset-0 bg-black bg-opacity-75 flex items-center justify-center z-50">
+        <div class="bg-white rounded-2xl p-8 text-center animate-pulse-scale">
+            <div class="w-16 h-16 border-4 border-purple-500 border-t-transparent rounded-full animate-spin mx-auto mb-4"></div>
+            <p class="text-xl font-bold text-gray-800">Gerando exportação...</p>
+            <p class="text-sm text-gray-600 mt-2">Aguarde um momento</p>
+        </div>
+    </div>
+
+    <!-- Modal de Confirmação de Reset -->
+    <div id="resetModal" class="hidden fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
+        <div class="bg-white rounded-2xl shadow-2xl max-w-md w-full p-6 animate-slide-in">
+            <div class="text-center mb-6">
+                <div class="w-16 h-16 bg-red-100 rounded-full flex items-center justify-center mx-auto mb-4">
+                    <i data-lucide="alert-triangle" class="text-red-600" size="32"></i>
+                </div>
+                <h3 class="text-2xl font-bold text-gray-800 mb-2">Reiniciar Todos os Dados?</h3>
+                <p class="text-gray-600">
+                    Esta ação é <strong class="text-red-600">irreversível</strong> e irá:
+                </p>
+            </div>
+
+            <div class="bg-red-50 border-2 border-red-200 rounded-lg p-4 mb-6">
+                <ul class="space-y-2 text-sm text-gray-700">
+                    <li class="flex items-start">
+                        <span class="text-red-500 mr-2">✗</span>
+                        <span>Apagar todos os seus gastos registrados</span>
+                    </li>
+                    <li class="flex items-start">
+                        <span class="text-red-500 mr-2">✗</span>
+                        <span>Resetar todos os potinhos personalizados</span>
+                    </li>
+                    <li class="flex items-start">
+                        <span class="text-red-500 mr-2">✗</span>
+                        <span>Zerar a renda configurada</span>
+                    </li>
+                    <li class="flex items-start">
+                        <span class="text-green-500 mr-2">✓</span>
+                        <span>Restaurar configuração padrão (50-30-20)</span>
+                    </li>
+                </ul>
+            </div>
+
+            <div class="bg-yellow-50 border border-yellow-300 rounded-lg p-3 mb-6">
+                <p class="text-sm text-yellow-800 flex items-start">
+                    <i data-lucide="lightbulb" size="16" class="mr-2 mt-0.5 flex-shrink-0"></i>
+                    <span><strong>Dica:</strong> Exporte seus dados antes de reiniciar para não perder seu histórico!</span>
+                </p>
+            </div>
+
+            <div class="flex space-x-3">
+                <button id="cancelResetBtn" class="flex-1 bg-gray-200 hover:bg-gray-300 text-gray-800 py-3 rounded-lg font-semibold transition">
+                    Cancelar
+                </button>
+                <button id="confirmResetBtn" class="flex-1 bg-red-500 hover:bg-red-600 text-white py-3 rounded-lg font-semibold transition flex items-center justify-center space-x-2">
+                    <i data-lucide="trash-2" size="20"></i>
+                    <span>Sim, Reiniciar</span>
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Funções de Máscara de Dinheiro
+        function formatMoney(value) {
+            // Remove tudo que não é dígito
+            value = value.replace(/\D/g, '');
+            
+            // Converte para número e divide por 100
+            value = (parseInt(value) / 100).toFixed(2);
+            
+            // Formata no padrão brasileiro
+            value = value.replace('.', ',');
+            value = value.replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1.');
+            
+            return value;
+        }
+
+        function parseMoney(value) {
+            // Remove pontos de milhares e substitui vírgula por ponto
+            value = value.replace(/\./g, '').replace(',', '.');
+            return parseFloat(value) || 0;
+        }
+
+        function applyMoneyMask(input) {
+            input.addEventListener('input', function(e) {
+                let value = e.target.value;
+                // Só aplica formatação se houver algum dígito
+                if (value.replace(/\D/g, '').length > 0) {
+                    e.target.value = formatMoney(value);
+                }
+            });
+
+            input.addEventListener('keypress', function(e) {
+                // Permite apenas números
+                const charCode = e.which ? e.which : e.keyCode;
+                if (charCode > 31 && (charCode < 48 || charCode > 57)) {
+                    e.preventDefault();
+                }
+            });
+
+            input.addEventListener('focus', function(e) {
+                // Se for 0,00, seleciona tudo para facilitar substituir
+                if (e.target.value === '0,00') {
+                    setTimeout(() => e.target.select(), 0);
+                }
+            });
+
+            input.addEventListener('blur', function(e) {
+                // Se estiver vazio ou for zero, limpa o campo
+                if (!e.target.value || parseMoney(e.target.value) === 0) {
+                    e.target.value = '';
+                }
+            });
+        }
+
+        // Estado da Aplicação
+        let state = {
+            income: 0,
+            pots: [],
+            expenses: []
+        };
+
+        // Carregar do LocalStorage
+        function loadState() {
+            const saved = localStorage.getItem('moneyPotsApp');
+            if (saved) {
+                state = JSON.parse(saved);
+            } else {
+                // Potinhos padrão (50-30-20)
+                state.pots = [
+                    { id: '1', name: 'Necessidades', percentage: 50, color: 'green', icon: '🏠', spent: 0 },
+                    { id: '2', name: 'Desejos', percentage: 30, color: 'blue', icon: '🎮', spent: 0 },
+                    { id: '3', name: 'Futuro', percentage: 20, color: 'purple', icon: '💰', spent: 0 }
+                ];
+            }
+            render();
+        }
+
+        // Salvar no LocalStorage
+        function saveState() {
+            localStorage.setItem('moneyPotsApp', JSON.stringify(state));
+        }
+
+        // Renderizar tudo
+        function render() {
+            renderIncome();
+            renderPots();
+            renderPotSelect();
+            renderExpenseHistory();
+        }
+
+        // Renderizar Renda
+        function renderIncome() {
+            const incomeInput = document.getElementById('incomeInput');
+            if (state.income > 0) {
+                incomeInput.value = formatMoney((state.income * 100).toString());
+            } else {
+                incomeInput.value = '';
+            }
+            document.getElementById('totalIncomeDisplay').textContent = formatCurrency(state.income);
+            
+            // Calcular distribuição total
+            const totalDistribution = state.pots.reduce((sum, pot) => sum + pot.percentage, 0);
+            const distributionDisplay = document.getElementById('totalDistributionDisplay');
+            const distributionBar = document.getElementById('distributionBar');
+            
+            distributionDisplay.textContent = totalDistribution.toFixed(1) + '%';
+            distributionBar.style.width = Math.min(totalDistribution, 100) + '%';
+            
+            // Cores baseadas na distribuição
+            if (totalDistribution > 100) {
+                distributionDisplay.classList.remove('text-blue-700', 'text-yellow-700');
+                distributionDisplay.classList.add('text-red-700');
+                distributionBar.classList.remove('bg-blue-500', 'bg-yellow-500');
+                distributionBar.classList.add('bg-red-500');
+            } else if (totalDistribution >= 90) {
+                distributionDisplay.classList.remove('text-blue-700', 'text-red-700');
+                distributionDisplay.classList.add('text-yellow-700');
+                distributionBar.classList.remove('bg-blue-500', 'bg-red-500');
+                distributionBar.classList.add('bg-yellow-500');
+            } else {
+                distributionDisplay.classList.remove('text-yellow-700', 'text-red-700');
+                distributionDisplay.classList.add('text-blue-700');
+                distributionBar.classList.remove('bg-yellow-500', 'bg-red-500');
+                distributionBar.classList.add('bg-blue-500');
+            }
+        }
+
+        // Renderizar Potinhos
+        function renderPots() {
+            const container = document.getElementById('potsContainer');
+            container.innerHTML = '';
+
+            state.pots.forEach(pot => {
+                const allocated = (state.income * pot.percentage) / 100;
+                const spent = pot.spent || 0;
+                const percentage = allocated > 0 ? (spent / allocated) * 100 : 0;
+                const remaining = allocated - spent;
+
+                let barColor = 'bg-green-500';
+                let alertClass = '';
+                let alertMessage = '';
+
+                if (percentage >= 100) {
+                    barColor = 'bg-red-500';
+                    alertClass = 'border-red-500 bg-red-50';
+                    alertMessage = '<div class="bg-red-500 text-white px-3 py-1 rounded-full text-xs font-bold flex items-center"><i data-lucide="alert-triangle" size="14" class="mr-1"></i> Limite Excedido!</div>';
+                } else if (percentage >= 90) {
+                    barColor = 'bg-yellow-500';
+                    alertClass = 'border-yellow-500 bg-yellow-50';
+                    alertMessage = '<div class="bg-yellow-500 text-white px-3 py-1 rounded-full text-xs font-bold flex items-center"><i data-lucide="alert-circle" size="14" class="mr-1"></i> Atenção: 90%</div>';
+                }
+
+                const card = document.createElement('div');
+                card.className = `pot-card bg-white rounded-xl shadow-lg p-6 border-2 ${alertClass} fade-in`;
+                card.innerHTML = `
+                    <div class="flex items-center justify-between mb-4">
+                        <div class="flex items-center space-x-3">
+                            <div class="text-4xl">${pot.icon || '📦'}</div>
+                            <div>
+                                <h3 class="text-xl font-bold text-gray-800">${pot.name}</h3>
+                                <p class="text-sm text-gray-500">${pot.percentage}% da renda</p>
+                            </div>
+                        </div>
+                        <button onclick="editPot('${pot.id}')" class="text-gray-400 hover:text-gray-600 transition">
+                            <i data-lucide="edit-2" size="20"></i>
+                        </button>
+                    </div>
+
+                    ${alertMessage ? '<div class="mb-3">' + alertMessage + '</div>' : ''}
+
+                    <div class="space-y-2 mb-4">
+                        <div class="flex justify-between text-sm">
+                            <span class="text-gray-600">Orçado:</span>
+                            <span class="font-bold text-${pot.color}-600">${formatCurrency(allocated)}</span>
+                        </div>
+                        <div class="flex justify-between text-sm">
+                            <span class="text-gray-600">Gasto:</span>
+                            <span class="font-bold text-gray-800">${formatCurrency(spent)}</span>
+                        </div>
+                        <div class="flex justify-between text-sm">
+                            <span class="text-gray-600">Restante:</span>
+                            <span class="font-bold ${remaining >= 0 ? 'text-green-600' : 'text-red-600'}">${formatCurrency(remaining)}</span>
+                        </div>
+                    </div>
+
+                    <div class="w-full bg-gray-200 rounded-full h-4 overflow-hidden">
+                        <div class="progress-bar ${barColor} h-full rounded-full transition-all" style="width: ${Math.min(percentage, 100)}%"></div>
+                    </div>
+                    <p class="text-xs text-gray-500 text-center mt-2">${percentage.toFixed(1)}% utilizado</p>
+                `;
+                container.appendChild(card);
+            });
+
+            // Inicializar ícones
+            lucide.createIcons();
+        }
+
+        // Renderizar select de potinhos
+        function renderPotSelect() {
+            const select = document.getElementById('expensePot');
+            select.innerHTML = '<option value="">Selecione...</option>';
+            state.pots.forEach(pot => {
+                const option = document.createElement('option');
+                option.value = pot.id;
+                option.textContent = `${pot.icon} ${pot.name}`;
+                select.appendChild(option);
+            });
+        }
+
+        // Renderizar histórico
+        function renderExpenseHistory() {
+            const container = document.getElementById('expenseHistory');
+            
+            if (state.expenses.length === 0) {
+                container.innerHTML = '<p class="text-gray-500 text-center py-8">Nenhum gasto registrado ainda.</p>';
+                return;
+            }
+
+            container.innerHTML = '';
+            const recent = state.expenses.slice().reverse().slice(0, 10);
+
+            recent.forEach(expense => {
+                const pot = state.pots.find(p => p.id === expense.potId);
+                const item = document.createElement('div');
+                item.className = 'flex items-center justify-between p-4 bg-gray-50 rounded-lg hover:bg-gray-100 transition fade-in';
+                item.innerHTML = `
+                    <div class="flex items-center space-x-3 flex-1">
+                        <div class="text-2xl">${pot ? pot.icon : '📦'}</div>
+                        <div class="flex-1">
+                            <p class="font-semibold text-gray-800">${expense.description}</p>
+                            <p class="text-xs text-gray-500">${pot ? pot.name : 'Desconhecido'} • ${new Date(expense.date).toLocaleDateString('pt-BR')}</p>
+                        </div>
+                    </div>
+                    <div class="flex items-center space-x-3">
+                        <span class="font-bold text-red-600">${formatCurrency(expense.value)}</span>
+                        <button onclick="deleteExpense('${expense.id}')" class="text-red-500 hover:text-red-700 transition">
+                            <i data-lucide="trash-2" size="18"></i>
+                        </button>
+                    </div>
+                `;
+                container.appendChild(item);
+            });
+
+            lucide.createIcons();
+        }
+
+        // Salvar Renda
+        document.getElementById('saveIncomeBtn').addEventListener('click', () => {
+            const inputValue = document.getElementById('incomeInput').value.trim();
+            if (!inputValue) {
+                showNotification('Digite um valor válido!', 'error');
+                return;
+            }
+            
+            const value = parseMoney(inputValue);
+            if (value && value > 0) {
+                state.income = value;
+                saveState();
+                render();
+                showNotification('Renda salva com sucesso!', 'success');
+            } else {
+                showNotification('Digite um valor válido maior que zero!', 'error');
+            }
+        });
+
+        // Adicionar Gasto
+        document.getElementById('expenseForm').addEventListener('submit', (e) => {
+            e.preventDefault();
+            
+            const description = document.getElementById('expenseDescription').value.trim();
+            const valueInput = document.getElementById('expenseValue').value.trim();
+            const potId = document.getElementById('expensePot').value;
+
+            if (!description) {
+                showNotification('Digite uma descrição para o gasto!', 'error');
+                return;
+            }
+
+            if (!valueInput) {
+                showNotification('Digite um valor para o gasto!', 'error');
+                return;
+            }
+
+            const value = parseMoney(valueInput);
+            if (!value || value <= 0) {
+                showNotification('Digite um valor válido maior que zero!', 'error');
+                return;
+            }
+
+            if (!potId) {
+                showNotification('Selecione um potinho!', 'error');
+                return;
+            }
+
+            const expense = {
+                id: Date.now().toString(),
+                description,
+                value,
+                potId,
+                date: new Date().toISOString()
+            };
+
+            state.expenses.push(expense);
+
+            // Atualizar gasto do potinho
+            const pot = state.pots.find(p => p.id === potId);
+            if (pot) {
+                pot.spent = (pot.spent || 0) + value;
+            }
+
+            saveState();
+            render();
+            
+            // Limpar formulário
+            e.target.reset();
+            showNotification('Gasto adicionado!', 'success');
+        });
+
+        // Deletar Gasto
+        window.deleteExpense = function(id) {
+            const expense = state.expenses.find(e => e.id === id);
+            if (expense) {
+                // Remover do gasto do potinho
+                const pot = state.pots.find(p => p.id === expense.potId);
+                if (pot) {
+                    pot.spent = Math.max(0, (pot.spent || 0) - expense.value);
+                }
+                
+                state.expenses = state.expenses.filter(e => e.id !== id);
+                saveState();
+                render();
+                showNotification('Gasto removido!', 'success');
+            }
+        };
+
+        // Modal de Potinho
+        const potModal = document.getElementById('potModal');
+        let editingPotId = null;
+
+        document.getElementById('addPotBtn').addEventListener('click', () => {
+            editingPotId = null;
+            document.getElementById('modalTitle').textContent = 'Novo Potinho';
+            document.getElementById('potForm').reset();
+            document.getElementById('potId').value = '';
+            document.getElementById('deletePotBtn').classList.add('hidden');
+            
+            // Reset slider e valor
+            document.getElementById('potPercentageSlider').value = 0;
+            document.getElementById('potPercentage').value = 0;
+            document.getElementById('percentageValue').textContent = '0%';
+            document.getElementById('allocatedValue').textContent = 'R$ 0,00';
+            
+            // Reset barra de alocação
+            const potAllocationBar = document.getElementById('potAllocationBar');
+            const potAllocationText = document.getElementById('potAllocationText');
+            if (potAllocationBar) potAllocationBar.style.width = '0%';
+            if (potAllocationText) potAllocationText.textContent = '0% da renda total';
+            
+            // Mostrar/esconder aviso de renda
+            const noIncomeWarning = document.getElementById('noIncomeWarning');
+            const allocatedValueDisplay = document.getElementById('allocatedValue');
+            
+            if (!state.income || state.income === 0) {
+                noIncomeWarning.classList.remove('hidden');
+                if (allocatedValueDisplay) {
+                    allocatedValueDisplay.classList.add('text-gray-400');
+                    allocatedValueDisplay.classList.remove('text-green-600');
+                }
+            } else {
+                noIncomeWarning.classList.add('hidden');
+                if (allocatedValueDisplay) {
+                    allocatedValueDisplay.classList.remove('text-gray-400');
+                    allocatedValueDisplay.classList.add('text-green-600');
+                }
+            }
+            
+            updateTotalPercentage();
+            potModal.classList.remove('hidden');
+            lucide.createIcons();
+        });
+
+        window.editPot = function(id) {
+            const pot = state.pots.find(p => p.id === id);
+            if (pot) {
+                editingPotId = id;
+                document.getElementById('modalTitle').textContent = 'Editar Potinho';
+                document.getElementById('potId').value = pot.id;
+                document.getElementById('potName').value = pot.name;
+                document.getElementById('potPercentage').value = pot.percentage;
+                document.getElementById('potPercentageSlider').value = pot.percentage;
+                document.getElementById('percentageValue').textContent = pot.percentage.toFixed(1) + '%';
+                document.getElementById('potIcon').value = pot.icon;
+                document.getElementById('potColor').value = pot.color;
+                
+                // Atualizar valor alocado e barra
+                const allocated = (state.income * pot.percentage) / 100;
+                const allocatedValueDisplay = document.getElementById('allocatedValue');
+                allocatedValueDisplay.textContent = formatCurrency(allocated);
+                
+                const potAllocationBar = document.getElementById('potAllocationBar');
+                const potAllocationText = document.getElementById('potAllocationText');
+                if (potAllocationBar) potAllocationBar.style.width = Math.min(pot.percentage, 100) + '%';
+                if (potAllocationText) potAllocationText.textContent = pot.percentage.toFixed(1) + '% da renda total';
+                
+                // Mostrar/esconder aviso de renda
+                const noIncomeWarning = document.getElementById('noIncomeWarning');
+                if (!state.income || state.income === 0) {
+                    noIncomeWarning.classList.remove('hidden');
+                    if (allocatedValueDisplay) {
+                        allocatedValueDisplay.classList.add('text-gray-400');
+                        allocatedValueDisplay.classList.remove('text-green-600');
+                    }
+                } else {
+                    noIncomeWarning.classList.add('hidden');
+                    if (allocatedValueDisplay) {
+                        allocatedValueDisplay.classList.remove('text-gray-400');
+                        allocatedValueDisplay.classList.add('text-green-600');
+                    }
+                }
+                
+                // Destacar cor selecionada
+                document.querySelectorAll('.color-btn').forEach(btn => {
+                    btn.classList.remove('ring-4', 'ring-gray-800');
+                    if (btn.dataset.color === pot.color) {
+                        btn.classList.add('ring-4', 'ring-gray-800');
+                    }
+                });
+                
+                document.getElementById('deletePotBtn').classList.remove('hidden');
+                updateTotalPercentage();
+                potModal.classList.remove('hidden');
+                lucide.createIcons();
+            }
+        };
+
+        document.getElementById('closeModalBtn').addEventListener('click', () => {
+            potModal.classList.add('hidden');
+        });
+
+        // Seleção de cor
+        document.querySelectorAll('.color-btn').forEach(btn => {
+            btn.addEventListener('click', (e) => {
+                e.preventDefault();
+                document.querySelectorAll('.color-btn').forEach(b => b.classList.remove('ring-4', 'ring-gray-800'));
+                btn.classList.add('ring-4', 'ring-gray-800');
+                document.getElementById('potColor').value = btn.dataset.color;
+            });
+        });
+
+        // Sincronizar slider e campo numérico
+        const percentageSlider = document.getElementById('potPercentageSlider');
+        const percentageInput = document.getElementById('potPercentage');
+        const percentageValue = document.getElementById('percentageValue');
+
+        percentageSlider.addEventListener('input', (e) => {
+            const value = parseFloat(e.target.value);
+            percentageInput.value = value;
+            percentageValue.textContent = value.toFixed(1) + '%';
+            updateAllocatedValue(value);
+            updateTotalPercentage();
+        });
+
+        percentageInput.addEventListener('input', (e) => {
+            const value = parseFloat(e.target.value) || 0;
+            const maxAllowed = getMaxAllowedPercentage();
+            
+            if (value > maxAllowed) {
+                e.target.value = maxAllowed;
+                percentageSlider.value = maxAllowed;
+                percentageValue.textContent = maxAllowed.toFixed(1) + '%';
+                updateAllocatedValue(maxAllowed);
+            } else {
+                percentageSlider.value = value;
+                percentageValue.textContent = value.toFixed(1) + '%';
+                updateAllocatedValue(value);
+            }
+            updateTotalPercentage();
+        });
+
+        function updateAllocatedValue(percentage) {
+            const allocated = (state.income * percentage) / 100;
+            const allocatedValueDisplay = document.getElementById('allocatedValue');
+            const potAllocationBar = document.getElementById('potAllocationBar');
+            const potAllocationText = document.getElementById('potAllocationText');
+            
+            // Atualizar valor alocado
+            if (allocatedValueDisplay) {
+                allocatedValueDisplay.textContent = formatCurrency(allocated);
+            }
+            
+            // Atualizar barra e texto de alocação
+            if (potAllocationBar && potAllocationText) {
+                potAllocationBar.style.width = Math.min(percentage, 100) + '%';
+                potAllocationText.textContent = percentage.toFixed(1) + '% da renda total';
+            }
+            
+            // Mostrar/esconder aviso de renda
+            const noIncomeWarning = document.getElementById('noIncomeWarning');
+            if (!state.income || state.income === 0) {
+                if (noIncomeWarning) noIncomeWarning.classList.remove('hidden');
+                if (allocatedValueDisplay) {
+                    allocatedValueDisplay.classList.add('text-gray-400');
+                    allocatedValueDisplay.classList.remove('text-green-600');
+                }
+            } else {
+                if (noIncomeWarning) noIncomeWarning.classList.add('hidden');
+                if (allocatedValueDisplay) {
+                    allocatedValueDisplay.classList.remove('text-gray-400');
+                    allocatedValueDisplay.classList.add('text-green-600');
+                }
+            }
+            
+            // Animação de destaque quando muda
+            if (state.income > 0 && allocatedValueDisplay) {
+                allocatedValueDisplay.classList.add('animate-pulse-scale');
+                setTimeout(() => {
+                    allocatedValueDisplay.classList.remove('animate-pulse-scale');
+                }, 500);
+            }
+        }
+
+        function getMaxAllowedPercentage() {
+            const usedByOthers = state.pots
+                .filter(p => p.id !== editingPotId)
+                .reduce((sum, pot) => sum + pot.percentage, 0);
+            return Math.max(0, 100 - usedByOthers);
+        }
+
+        function updateTotalPercentage() {
+            const current = parseFloat(document.getElementById('potPercentage').value) || 0;
+            const usedByOthers = state.pots
+                .filter(p => p.id !== editingPotId)
+                .reduce((sum, pot) => sum + pot.percentage, 0);
+            
+            const total = usedByOthers + current;
+            const available = Math.max(0, 100 - total);
+            
+            // Atualizar valores
+            document.getElementById('totalPercentage').textContent = total.toFixed(1) + '%';
+            document.getElementById('availablePercentage').textContent = available.toFixed(1) + '%';
+            
+            // Atualizar barra de progresso
+            const progressBar = document.getElementById('totalPercentageBar');
+            progressBar.style.width = Math.min(total, 100) + '%';
+            
+            // Feedback visual
+            const feedback = document.getElementById('percentageFeedback');
+            const warning = document.getElementById('percentageWarning');
+            const availableSpan = document.getElementById('availablePercentage');
+            const totalSpan = document.getElementById('totalPercentage');
+            
+            if (total > 100) {
+                // Vermelho - ultrapassou
+                feedback.classList.remove('bg-green-50', 'bg-yellow-50');
+                feedback.classList.add('bg-red-50', 'border', 'border-red-300');
+                progressBar.classList.remove('bg-green-500', 'bg-yellow-500');
+                progressBar.classList.add('bg-red-500');
+                totalSpan.classList.remove('text-green-600', 'text-yellow-600');
+                totalSpan.classList.add('text-red-600');
+                availableSpan.classList.remove('text-green-600', 'text-yellow-600');
+                availableSpan.classList.add('text-red-600');
+                warning.classList.remove('hidden');
+            } else if (total >= 90) {
+                // Amarelo - próximo do limite
+                feedback.classList.remove('bg-green-50', 'bg-red-50', 'border-red-300');
+                feedback.classList.add('bg-yellow-50', 'border', 'border-yellow-300');
+                progressBar.classList.remove('bg-green-500', 'bg-red-500');
+                progressBar.classList.add('bg-yellow-500');
+                totalSpan.classList.remove('text-green-600', 'text-red-600');
+                totalSpan.classList.add('text-yellow-600');
+                availableSpan.classList.remove('text-red-600');
+                availableSpan.classList.add('text-green-600');
+                warning.classList.add('hidden');
+            } else {
+                // Verde - tudo ok
+                feedback.classList.remove('bg-yellow-50', 'bg-red-50', 'border', 'border-red-300', 'border-yellow-300');
+                feedback.classList.add('bg-green-50');
+                progressBar.classList.remove('bg-yellow-500', 'bg-red-500');
+                progressBar.classList.add('bg-green-500');
+                totalSpan.classList.remove('text-yellow-600', 'text-red-600');
+                totalSpan.classList.add('text-green-600');
+                availableSpan.classList.add('text-green-600');
+                warning.classList.add('hidden');
+            }
+            
+            // Ajustar máximo do slider dinamicamente
+            const maxAllowed = getMaxAllowedPercentage() + current;
+            percentageSlider.max = Math.min(100, maxAllowed);
+            
+            // Re-inicializar ícones do Lucide
+            lucide.createIcons();
+        }
+
+        // Salvar Potinho
+        document.getElementById('potForm').addEventListener('submit', (e) => {
+            e.preventDefault();
+
+            const name = document.getElementById('potName').value;
+            const percentage = parseFloat(document.getElementById('potPercentage').value);
+            const icon = document.getElementById('potIcon').value;
+            const color = document.getElementById('potColor').value;
+
+            if (!name || !percentage) {
+                showNotification('Preencha todos os campos!', 'error');
+                return;
+            }
+
+            // Validar que não ultrapassa 100%
+            const usedByOthers = state.pots
+                .filter(p => p.id !== editingPotId)
+                .reduce((sum, pot) => sum + pot.percentage, 0);
+            
+            const total = usedByOthers + percentage;
+            
+            if (total > 100) {
+                showNotification(`A soma dos potinhos não pode ultrapassar 100%! Disponível: ${(100 - usedByOthers).toFixed(1)}%`, 'error');
+                return;
+            }
+
+            if (editingPotId) {
+                // Editar
+                const pot = state.pots.find(p => p.id === editingPotId);
+                if (pot) {
+                    pot.name = name;
+                    pot.percentage = percentage;
+                    pot.icon = icon;
+                    pot.color = color;
+                }
+            } else {
+                // Criar novo
+                state.pots.push({
+                    id: Date.now().toString(),
+                    name,
+                    percentage,
+                    icon,
+                    color,
+                    spent: 0
+                });
+            }
+
+            saveState();
+            render();
+            potModal.classList.add('hidden');
+            showNotification('Potinho salvo com sucesso!', 'success');
+        });
+
+        // Deletar Potinho
+        document.getElementById('deletePotBtn').addEventListener('click', () => {
+            if (confirm('Tem certeza que deseja excluir este potinho? Os gastos relacionados serão mantidos.')) {
+                state.pots = state.pots.filter(p => p.id !== editingPotId);
+                saveState();
+                render();
+                potModal.classList.add('hidden');
+                showNotification('Potinho excluído!', 'success');
+            }
+        });
+
+        // Exportação
+        const exportModal = document.getElementById('exportModal');
+        const exportLoading = document.getElementById('exportLoading');
+
+        document.getElementById('exportBtn').addEventListener('click', () => {
+            exportModal.classList.remove('hidden');
+        });
+
+        document.getElementById('closeExportModalBtn').addEventListener('click', () => {
+            exportModal.classList.add('hidden');
+        });
+
+        // Função auxiliar para mostrar loading
+        function showLoading() {
+            exportLoading.classList.remove('hidden');
+        }
+
+        function hideLoading() {
+            exportLoading.classList.add('hidden');
+        }
+
+        // Exportar como PDF
+        document.getElementById('exportPDFBtn').addEventListener('click', async () => {
+            exportModal.classList.add('hidden');
+            showLoading();
+
+            try {
+                // Criar uma área temporária com o conteúdo a ser exportado
+                const exportContent = document.createElement('div');
+                exportContent.style.width = '1200px';
+                exportContent.style.padding = '40px';
+                exportContent.style.backgroundColor = 'white';
+                exportContent.innerHTML = await generateExportHTML();
+                document.body.appendChild(exportContent);
+
+                // Aguardar renderização
+                await new Promise(resolve => setTimeout(resolve, 500));
+
+                // Capturar com html2canvas
+                const canvas = await html2canvas(exportContent, {
+                    scale: 2,
+                    backgroundColor: '#ffffff',
+                    logging: false
+                });
+
+                // Remover elemento temporário
+                document.body.removeChild(exportContent);
+
+                // Converter para PDF
+                const imgData = canvas.toDataURL('image/png');
+                const { jsPDF } = window.jspdf;
+                const pdf = new jsPDF({
+                    orientation: 'portrait',
+                    unit: 'mm',
+                    format: 'a4'
+                });
+
+                const pageWidth = pdf.internal.pageSize.getWidth();
+                const pageHeight = pdf.internal.pageSize.getHeight();
+                const imgWidth = pageWidth - 20;
+                const imgHeight = (canvas.height * imgWidth) / canvas.width;
+
+                let heightLeft = imgHeight;
+                let position = 10;
+
+                pdf.addImage(imgData, 'PNG', 10, position, imgWidth, imgHeight);
+                heightLeft -= pageHeight;
+
+                while (heightLeft >= 0) {
+                    position = heightLeft - imgHeight + 10;
+                    pdf.addPage();
+                    pdf.addImage(imgData, 'PNG', 10, position, imgWidth, imgHeight);
+                    heightLeft -= pageHeight;
+                }
+
+                pdf.save(`meu-dinheiro-potinhos-${new Date().toISOString().split('T')[0]}.pdf`);
+                hideLoading();
+                showNotification('PDF gerado com sucesso!', 'success');
+            } catch (error) {
+                console.error('Erro ao gerar PDF:', error);
+                hideLoading();
+                showNotification('Erro ao gerar PDF. Tente novamente.', 'error');
+            }
+        });
+
+        // Exportar como Imagem
+        document.getElementById('exportImageBtn').addEventListener('click', async () => {
+            exportModal.classList.add('hidden');
+            showLoading();
+
+            try {
+                // Criar uma área temporária com o conteúdo a ser exportado
+                const exportContent = document.createElement('div');
+                exportContent.style.width = '1200px';
+                exportContent.style.padding = '40px';
+                exportContent.style.backgroundColor = 'white';
+                exportContent.innerHTML = await generateExportHTML();
+                document.body.appendChild(exportContent);
+
+                // Aguardar renderização
+                await new Promise(resolve => setTimeout(resolve, 500));
+
+                // Capturar com html2canvas
+                const canvas = await html2canvas(exportContent, {
+                    scale: 2,
+                    backgroundColor: '#ffffff',
+                    logging: false
+                });
+
+                // Remover elemento temporário
+                document.body.removeChild(exportContent);
+
+                // Converter para imagem e baixar
+                canvas.toBlob(blob => {
+                    const url = URL.createObjectURL(blob);
+                    const a = document.createElement('a');
+                    a.href = url;
+                    a.download = `meu-dinheiro-potinhos-${new Date().toISOString().split('T')[0]}.png`;
+                    a.click();
+                    URL.revokeObjectURL(url);
+                    hideLoading();
+                    showNotification('Imagem gerada com sucesso!', 'success');
+                });
+            } catch (error) {
+                console.error('Erro ao gerar imagem:', error);
+                hideLoading();
+                showNotification('Erro ao gerar imagem. Tente novamente.', 'error');
+            }
+        });
+
+        // Gerar HTML para exportação
+        async function generateExportHTML() {
+            const totalSpent = state.pots.reduce((sum, pot) => sum + (pot.spent || 0), 0);
+            const remaining = state.income - totalSpent;
+            const totalDistribution = state.pots.reduce((sum, pot) => sum + pot.percentage, 0);
+
+            let html = `
+                <div style="font-family: system-ui, -apple-system, sans-serif;">
+                    <!-- Header -->
+                    <div style="text-align: center; margin-bottom: 40px; padding-bottom: 20px; border-bottom: 3px solid #a855f7;">
+                        <div style="font-size: 42px; margin-bottom: 10px;">💰</div>
+                        <h1 style="font-size: 36px; font-weight: bold; background: linear-gradient(135deg, #a855f7 0%, #ec4899 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; margin: 0;">
+                            Meu Dinheiro por Potinhos
+                        </h1>
+                        <p style="color: #666; margin-top: 8px; font-size: 14px;">
+                            Relatório gerado em ${new Date().toLocaleDateString('pt-BR', { 
+                                day: '2-digit', 
+                                month: 'long', 
+                                year: 'numeric' 
+                            })}
+                        </p>
+                    </div>
+
+                    <!-- Resumo Financeiro -->
+                    <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 20px; margin-bottom: 40px;">
+                        <div style="background: linear-gradient(135deg, #f3e8ff 0%, #fce7f3 100%); padding: 24px; border-radius: 16px; box-shadow: 0 2px 8px rgba(0,0,0,0.1);">
+                            <div style="color: #666; font-size: 14px; margin-bottom: 8px;">💵 Renda Total</div>
+                            <div style="font-size: 32px; font-weight: bold; color: #7c3aed;">${formatCurrency(state.income)}</div>
+                        </div>
+                        <div style="background: linear-gradient(135deg, #dbeafe 0%, #e0e7ff 100%); padding: 24px; border-radius: 16px; box-shadow: 0 2px 8px rgba(0,0,0,0.1);">
+                            <div style="color: #666; font-size: 14px; margin-bottom: 8px;">📊 Distribuição</div>
+                            <div style="font-size: 32px; font-weight: bold; color: #3b82f6;">${totalDistribution.toFixed(1)}%</div>
+                        </div>
+                        <div style="background: linear-gradient(135deg, #fee2e2 0%, #fed7aa 100%); padding: 24px; border-radius: 16px; box-shadow: 0 2px 8px rgba(0,0,0,0.1);">
+                            <div style="color: #666; font-size: 14px; margin-bottom: 8px;">💸 Total Gasto</div>
+                            <div style="font-size: 32px; font-weight: bold; color: #dc2626;">${formatCurrency(totalSpent)}</div>
+                        </div>
+                        <div style="background: linear-gradient(135deg, #d1fae5 0%, #a7f3d0 100%); padding: 24px; border-radius: 16px; box-shadow: 0 2px 8px rgba(0,0,0,0.1);">
+                            <div style="color: #666; font-size: 14px; margin-bottom: 8px;">💰 Saldo Restante</div>
+                            <div style="font-size: 32px; font-weight: bold; color: #059669;">${formatCurrency(remaining)}</div>
+                        </div>
+                    </div>
+
+                    <!-- Potinhos Detalhados -->
+                    <h2 style="font-size: 24px; font-weight: bold; color: #333; margin-bottom: 20px; display: flex; align-items: center;">
+                        📦 Meus Potinhos
+                    </h2>
+                    <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 20px; margin-bottom: 40px;">
+            `;
+
+            state.pots.forEach(pot => {
+                const allocated = (state.income * pot.percentage) / 100;
+                const spent = pot.spent || 0;
+                const remaining = allocated - spent;
+                const percentage = allocated > 0 ? (spent / allocated) * 100 : 0;
+
+                let bgColor = '#f0fdf4';
+                let borderColor = '#86efac';
+                let barColor = '#10b981';
+                let statusText = '✓ Dentro do orçamento';
+                let statusColor = '#059669';
+
+                if (percentage >= 100) {
+                    bgColor = '#fef2f2';
+                    borderColor = '#fca5a5';
+                    barColor = '#dc2626';
+                    statusText = '⚠ Limite excedido';
+                    statusColor = '#dc2626';
+                } else if (percentage >= 90) {
+                    bgColor = '#fefce8';
+                    borderColor = '#fde047';
+                    barColor = '#eab308';
+                    statusText = '⚡ Próximo do limite';
+                    statusColor = '#ca8a04';
+                }
+
+                html += `
+                    <div style="background: ${bgColor}; padding: 20px; border-radius: 12px; border: 2px solid ${borderColor}; box-shadow: 0 2px 4px rgba(0,0,0,0.1);">
+                        <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 16px;">
+                            <div style="display: flex; align-items: center;">
+                                <div style="font-size: 32px; margin-right: 12px;">${pot.icon || '📦'}</div>
+                                <div>
+                                    <div style="font-size: 20px; font-weight: bold; color: #333;">${pot.name}</div>
+                                    <div style="font-size: 12px; color: #666;">${pot.percentage}% da renda</div>
+                                </div>
+                            </div>
+                            <div style="font-size: 12px; font-weight: bold; color: ${statusColor};">
+                                ${statusText}
+                            </div>
+                        </div>
+                        
+                        <div style="margin-bottom: 12px;">
+                            <div style="display: flex; justify-content: space-between; margin-bottom: 4px; font-size: 13px;">
+                                <span style="color: #666;">Orçado:</span>
+                                <span style="font-weight: bold;">${formatCurrency(allocated)}</span>
+                            </div>
+                            <div style="display: flex; justify-content: space-between; margin-bottom: 4px; font-size: 13px;">
+                                <span style="color: #666;">Gasto:</span>
+                                <span style="font-weight: bold;">${formatCurrency(spent)}</span>
+                            </div>
+                            <div style="display: flex; justify-content: space-between; margin-bottom: 8px; font-size: 13px;">
+                                <span style="color: #666;">Restante:</span>
+                                <span style="font-weight: bold; color: ${remaining >= 0 ? '#059669' : '#dc2626'};">${formatCurrency(remaining)}</span>
+                            </div>
+                        </div>
+                        
+                        <div style="width: 100%; background: #e5e7eb; border-radius: 8px; height: 12px; overflow: hidden;">
+                            <div style="background: ${barColor}; height: 100%; width: ${Math.min(percentage, 100)}%; border-radius: 8px; transition: width 0.3s;"></div>
+                        </div>
+                        <div style="text-align: center; font-size: 11px; color: #666; margin-top: 4px;">
+                            ${percentage.toFixed(1)}% utilizado
+                        </div>
+                    </div>
+                `;
+            });
+
+            html += `
+                    </div>
+
+                    <!-- Gastos Recentes -->
+                    ${state.expenses.length > 0 ? `
+                    <h2 style="font-size: 24px; font-weight: bold; color: #333; margin-bottom: 20px; display: flex; align-items: center;">
+                        📝 Últimos Gastos
+                    </h2>
+                    <div style="background: white; border: 2px solid #e5e7eb; border-radius: 12px; overflow: hidden;">
+            ` : ''}
+            `;
+
+            const recentExpenses = state.expenses.slice().reverse().slice(0, 10);
+            recentExpenses.forEach((expense, index) => {
+                const pot = state.pots.find(p => p.id === expense.potId);
+                html += `
+                    <div style="display: flex; justify-content: space-between; align-items: center; padding: 16px 20px; ${index < recentExpenses.length - 1 ? 'border-bottom: 1px solid #e5e7eb;' : ''}">
+                        <div style="display: flex; align-items: center;">
+                            <div style="font-size: 24px; margin-right: 12px;">${pot ? pot.icon : '📦'}</div>
+                            <div>
+                                <div style="font-size: 14px; font-weight: 600; color: #333;">${expense.description}</div>
+                                <div style="font-size: 11px; color: #666;">${pot ? pot.name : 'Desconhecido'} • ${new Date(expense.date).toLocaleDateString('pt-BR')}</div>
+                            </div>
+                        </div>
+                        <div style="font-size: 16px; font-weight: bold; color: #dc2626;">
+                            ${formatCurrency(expense.value)}
+                        </div>
+                    </div>
+                `;
+            });
+
+            if (state.expenses.length > 0) {
+                html += `
+                    </div>
+                `;
+            }
+
+            html += `
+                    <!-- Footer -->
+                    <div style="margin-top: 40px; padding-top: 20px; border-top: 2px solid #e5e7eb; text-align: center; color: #666; font-size: 12px;">
+                        <p>Gerado por <strong>Meu Dinheiro por Potinhos</strong></p>
+                        <p style="margin-top: 4px;">Seus dados são privados e salvos apenas no seu navegador</p>
+                    </div>
+                </div>
+            `;
+
+            return html;
+        }
+
+        // Exportar WhatsApp
+        document.getElementById('exportWhatsAppBtn').addEventListener('click', () => {
+            let text = `💰 *Meu Dinheiro por Potinhos*\n\n`;
+            text += `📊 Renda Total: ${formatCurrency(state.income)}\n\n`;
+            
+            text += `*Potinhos:*\n`;
+            state.pots.forEach(pot => {
+                const allocated = (state.income * pot.percentage) / 100;
+                const spent = pot.spent || 0;
+                const remaining = allocated - spent;
+                text += `${pot.icon} *${pot.name}* (${pot.percentage}%)\n`;
+                text += `   Orçado: ${formatCurrency(allocated)}\n`;
+                text += `   Gasto: ${formatCurrency(spent)}\n`;
+                text += `   Restante: ${formatCurrency(remaining)}\n\n`;
+            });
+
+            const totalSpent = state.pots.reduce((sum, pot) => sum + (pot.spent || 0), 0);
+            text += `\n💸 *Total Gasto:* ${formatCurrency(totalSpent)}\n`;
+            text += `💵 *Saldo Restante:* ${formatCurrency(state.income - totalSpent)}\n`;
+
+            const url = `https://wa.me/?text=${encodeURIComponent(text)}`;
+            window.open(url, '_blank');
+            exportModal.classList.add('hidden');
+        });
+
+        // Exportar JSON
+        document.getElementById('exportJSONBtn').addEventListener('click', () => {
+            const dataStr = JSON.stringify(state, null, 2);
+            const blob = new Blob([dataStr], { type: 'application/json' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = `meu-dinheiro-${new Date().toISOString().split('T')[0]}.json`;
+            a.click();
+            exportModal.classList.add('hidden');
+            showNotification('JSON exportado!', 'success');
+        });
+
+        // Exportar CSV
+        document.getElementById('exportCSVBtn').addEventListener('click', () => {
+            let csv = 'Data,Descrição,Valor,Potinho\n';
+            state.expenses.forEach(expense => {
+                const pot = state.pots.find(p => p.id === expense.potId);
+                csv += `${new Date(expense.date).toLocaleDateString('pt-BR')},"${expense.description}",${expense.value},"${pot ? pot.name : 'Desconhecido'}"\n`;
+            });
+
+            const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = `gastos-${new Date().toISOString().split('T')[0]}.csv`;
+            a.click();
+            exportModal.classList.add('hidden');
+            showNotification('CSV exportado!', 'success');
+        });
+
+        // Utilitários
+        function formatCurrency(value) {
+            return new Intl.NumberFormat('pt-BR', {
+                style: 'currency',
+                currency: 'BRL'
+            }).format(value || 0);
+        }
+
+        function showNotification(message, type = 'success') {
+            const notification = document.createElement('div');
+            notification.className = `fixed top-4 right-4 z-50 px-6 py-3 rounded-lg shadow-lg text-white font-semibold animate-slide-in max-w-md ${
+                type === 'success' ? 'bg-green-500' : 'bg-red-500'
+            }`;
+            notification.textContent = message;
+            document.body.appendChild(notification);
+
+            // Mensagens mais longas ficam mais tempo
+            const duration = message.length > 50 ? 5000 : 3000;
+
+            setTimeout(() => {
+                notification.remove();
+            }, duration);
+        }
+
+        // Reset de Dados
+        const resetModal = document.getElementById('resetModal');
+
+        document.getElementById('resetBtn').addEventListener('click', () => {
+            resetModal.classList.remove('hidden');
+            lucide.createIcons();
+        });
+
+        document.getElementById('cancelResetBtn').addEventListener('click', () => {
+            resetModal.classList.add('hidden');
+        });
+
+        document.getElementById('confirmResetBtn').addEventListener('click', () => {
+            // Limpar localStorage
+            localStorage.removeItem('moneyPotsApp');
+            
+            // Resetar estado para padrão
+            state = {
+                income: 0,
+                pots: [
+                    { id: '1', name: 'Necessidades', percentage: 50, color: 'green', icon: '🏠', spent: 0 },
+                    { id: '2', name: 'Desejos', percentage: 30, color: 'blue', icon: '🎮', spent: 0 },
+                    { id: '3', name: 'Futuro', percentage: 20, color: 'purple', icon: '💰', spent: 0 }
+                ],
+                expenses: []
+            };
+            
+            // Salvar estado resetado
+            saveState();
+            
+            // Fechar modal
+            resetModal.classList.add('hidden');
+            
+            // Renderizar
+            render();
+            
+            // Notificação
+            showNotification('Dados reiniciados com sucesso! Configuração padrão restaurada.', 'success');
+        });
+
+        // Aplicar máscaras de dinheiro
+        applyMoneyMask(document.getElementById('incomeInput'));
+        applyMoneyMask(document.getElementById('expenseValue'));
+
+        // Inicializar
+        loadState();
+        lucide.createIcons();
+    </script>
+</body>
+</html>
