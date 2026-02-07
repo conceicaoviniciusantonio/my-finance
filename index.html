@@ -47,8 +47,8 @@
         }
         
         .pot-card:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1);
+            border-color: #94a3b8;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.08);
         }
         
         .fade-in {
@@ -68,82 +68,74 @@
             animation: spin 1s linear infinite;
         }
         
-        /* Slider customizado */
+        /* Slider customizado - visual neutro */
         .slider::-webkit-slider-thumb {
             appearance: none;
-            width: 24px;
-            height: 24px;
-            background: linear-gradient(135deg, #a855f7 0%, #ec4899 100%);
+            width: 22px;
+            height: 22px;
+            background: #475569;
             cursor: pointer;
             border-radius: 50%;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.2);
-            transition: transform 0.2s ease;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.2);
+            transition: background 0.2s ease;
         }
         
         .slider::-webkit-slider-thumb:hover {
-            transform: scale(1.2);
+            background: #334155;
         }
         
         .slider::-moz-range-thumb {
-            width: 24px;
-            height: 24px;
-            background: linear-gradient(135deg, #a855f7 0%, #ec4899 100%);
+            width: 22px;
+            height: 22px;
+            background: #475569;
             cursor: pointer;
             border-radius: 50%;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+            box-shadow: 0 1px 3px rgba(0,0,0,0.2);
             border: none;
-            transition: transform 0.2s ease;
+            transition: background 0.2s ease;
         }
         
         .slider::-moz-range-thumb:hover {
-            transform: scale(1.2);
+            background: #334155;
         }
         
         .slider::-webkit-slider-runnable-track {
-            background: linear-gradient(to right, 
-                #10b981 0%, 
-                #3b82f6 33%, 
-                #a855f7 66%, 
-                #ec4899 100%);
-            height: 12px;
-            border-radius: 6px;
+            background: #e2e8f0;
+            height: 10px;
+            border-radius: 5px;
         }
         
         .slider::-moz-range-track {
-            background: linear-gradient(to right, 
-                #10b981 0%, 
-                #3b82f6 33%, 
-                #a855f7 66%, 
-                #ec4899 100%);
-            height: 12px;
-            border-radius: 6px;
+            background: #e2e8f0;
+            height: 10px;
+            border-radius: 5px;
         }
     </style>
 </head>
-<body class="bg-gradient-to-br from-indigo-50 via-purple-50 to-pink-50 min-h-screen">
+<body class="bg-slate-100 min-h-screen">
     
     <!-- Header -->
-    <header class="bg-white shadow-lg animate-slide-in">
-        <div class="container mx-auto px-4 py-6">
+    <header class="bg-slate-800 text-white shadow-md animate-slide-in">
+        <div class="container mx-auto px-4 py-5">
             <div class="flex items-center justify-between">
                 <div class="flex items-center space-x-3">
-                    <div class="bg-gradient-to-r from-purple-500 to-pink-500 p-3 rounded-full">
-                        <i data-lucide="piggy-bank" class="text-white" size="32"></i>
+                    <div class="bg-slate-700 p-2.5 rounded-lg">
+                        <i data-lucide="piggy-bank" class="text-slate-200" size="28"></i>
                     </div>
                     <div>
-                        <h1 class="text-3xl font-bold bg-gradient-to-r from-purple-600 to-pink-600 bg-clip-text text-transparent">
+                        <h1 class="text-2xl font-bold text-white tracking-tight">
                             Meu Dinheiro por Potinhos
                         </h1>
-                        <p class="text-gray-600 text-sm">Organize suas finanças de forma inteligente</p>
+                        <p class="text-slate-400 text-sm">Controle de orçamento pessoal</p>
                     </div>
                 </div>
                 <div class="flex space-x-2">
-                    <button id="resetBtn" class="bg-red-500 hover:bg-red-600 text-white px-4 py-2 rounded-lg flex items-center space-x-2 transition" title="Reiniciar dados">
-                        <i data-lucide="refresh-ccw" size="20"></i>
+                    <button id="resetBtn" class="bg-slate-600 hover:bg-slate-500 text-white px-4 py-2 rounded-lg flex items-center space-x-2 transition text-sm font-medium" title="Reiniciar dados">
+                        <i data-lucide="refresh-ccw" size="18"></i>
                         <span class="hidden md:inline">Reiniciar</span>
                     </button>
-                    <button id="exportBtn" class="bg-green-500 hover:bg-green-600 text-white px-4 py-2 rounded-lg flex items-center space-x-2 transition">
-                        <i data-lucide="share-2" size="20"></i>
+                    <button id="exportBtn" class="bg-slate-700 hover:bg-slate-600 text-white px-4 py-2 rounded-lg flex items-center space-x-2 transition text-sm font-medium border border-slate-600">
+                        <i data-lucide="share-2" size="18"></i>
                         <span>Exportar</span>
                     </button>
                 </div>
@@ -154,65 +146,65 @@
     <main class="container mx-auto px-4 py-8">
         
         <!-- Configuração de Renda -->
-        <section class="bg-white rounded-2xl shadow-xl p-6 mb-8 animate-slide-in">
+        <section class="bg-white rounded-lg border border-slate-200 shadow-sm p-6 mb-6 animate-slide-in">
             <div class="flex items-center space-x-3 mb-4">
-                <i data-lucide="wallet" class="text-purple-500" size="28"></i>
-                <h2 class="text-2xl font-bold text-gray-800">Renda Mensal</h2>
+                <i data-lucide="wallet" class="text-slate-600" size="24"></i>
+                <h2 class="text-xl font-bold text-slate-800">Renda Mensal</h2>
             </div>
             <div class="flex flex-col md:flex-row gap-4">
                 <div class="flex-1">
-                    <label class="block text-sm font-medium text-gray-700 mb-2">Salário/Renda Total</label>
+                    <label class="block text-sm font-medium text-slate-700 mb-2">Salário / Renda Total</label>
                     <div class="relative">
-                        <span class="absolute left-3 top-3.5 text-gray-500 font-bold text-base">R$</span>
+                        <span class="absolute left-3 top-3.5 text-slate-500 font-medium text-base">R$</span>
                         <input 
                             type="text" 
                             id="incomeInput" 
                             placeholder="0,00" 
-                            class="w-full pl-12 pr-4 py-3 border-2 border-gray-300 rounded-lg focus:border-purple-500 focus:outline-none text-base h-12"
+                            class="w-full pl-12 pr-4 py-3 border border-slate-300 rounded-lg focus:border-slate-500 focus:ring-1 focus:ring-slate-500 focus:outline-none text-base h-12"
                         >
                     </div>
                 </div>
                 <div class="flex items-end">
-                    <button id="saveIncomeBtn" class="bg-gradient-to-r from-purple-500 to-pink-500 hover:from-purple-600 hover:to-pink-600 text-white px-6 py-3 rounded-lg font-semibold transition flex items-center space-x-2 h-12">
-                        <i data-lucide="save" size="20"></i>
+                    <button id="saveIncomeBtn" class="bg-slate-700 hover:bg-slate-600 text-white px-6 py-3 rounded-lg font-medium transition flex items-center space-x-2 h-12">
+                        <i data-lucide="save" size="18"></i>
                         <span>Salvar Renda</span>
                     </button>
                 </div>
             </div>
             
             <!-- Display Total -->
-            <div class="mt-4 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
-                <div class="p-4 bg-gradient-to-r from-purple-100 to-pink-100 rounded-lg">
-                    <p class="text-sm text-gray-700 mb-1">Renda Total Configurada:</p>
-                    <p class="text-3xl font-bold text-purple-700" id="totalIncomeDisplay">R$ 0,00</p>
+            <div class="mt-6 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+                <div class="p-4 bg-slate-50 border border-slate-200 rounded-lg">
+                    <p class="text-xs font-medium text-slate-500 uppercase tracking-wide mb-1">Renda Total Configurada</p>
+                    <p class="text-2xl font-bold text-slate-800" id="totalIncomeDisplay">R$ 0,00</p>
                 </div>
-                <div class="p-4 bg-gradient-to-r from-emerald-100 to-teal-100 rounded-lg">
-                    <p class="text-sm text-gray-700 mb-1">Renda Total Usada:</p>
-                    <p class="text-3xl font-bold text-emerald-700" id="totalIncomeUsedDisplay">R$ 0,00</p>
+                <div class="p-4 bg-slate-50 border border-slate-200 rounded-lg">
+                    <p class="text-xs font-medium text-slate-500 uppercase tracking-wide mb-1">Renda Total Usada</p>
+                    <p class="text-2xl font-bold text-slate-800" id="totalIncomeUsedDisplay">R$ 0,00</p>
                 </div>
-                <div class="p-4 bg-gradient-to-r from-amber-100 to-orange-100 rounded-lg">
-                    <p class="text-sm text-gray-700 mb-1">Total Sobrando:</p>
-                    <p class="text-3xl font-bold" id="totalRemainingDisplay">R$ 0,00</p>
+                <div class="p-4 bg-slate-50 border border-slate-200 rounded-lg">
+                    <p class="text-xs font-medium text-slate-500 uppercase tracking-wide mb-1">Total Sobrando</p>
+                    <p class="text-2xl font-bold" id="totalRemainingDisplay">R$ 0,00</p>
                 </div>
-                <div class="p-4 bg-gradient-to-r from-blue-100 to-indigo-100 rounded-lg">
-                    <p class="text-sm text-gray-700 mb-1">Distribuição dos Potinhos:</p>
-                    <p class="text-3xl font-bold" id="totalDistributionDisplay">0%</p>
-                    <div class="w-full bg-white rounded-full h-2 mt-2">
-                        <div id="distributionBar" class="h-full rounded-full transition-all" style="width: 0%"></div>
+                <div class="p-4 bg-slate-50 border border-slate-200 rounded-lg">
+                    <p class="text-xs font-medium text-slate-500 uppercase tracking-wide mb-1">Distribuição dos Potinhos</p>
+                    <p class="text-2xl font-bold text-slate-800" id="totalDistributionDisplay">0%</p>
+                    <div class="w-full bg-slate-200 rounded-full h-1.5 mt-2">
+                        <div id="distributionBar" class="h-full rounded-full transition-all bg-slate-500" style="width: 0%"></div>
                     </div>
                 </div>
             </div>
         </section>
 
         <!-- Gerenciar Potinhos -->
-        <section class="bg-white rounded-2xl shadow-xl p-6 mb-8 animate-slide-in">
+        <section class="bg-white rounded-lg border border-slate-200 shadow-sm p-6 mb-6 animate-slide-in">
             <div class="flex items-center justify-between mb-4">
                 <div class="flex items-center space-x-3">
-                    <i data-lucide="grid-3x3" class="text-indigo-500" size="28"></i>
-                    <h2 class="text-2xl font-bold text-gray-800">Meus Potinhos</h2>
+                    <i data-lucide="grid-3x3" class="text-slate-600" size="24"></i>
+                    <h2 class="text-xl font-bold text-slate-800">Meus Potinhos</h2>
                 </div>
-                <button id="addPotBtn" class="bg-indigo-500 hover:bg-indigo-600 text-white px-4 py-2 rounded-lg flex items-center space-x-2 transition">
-                    <i data-lucide="plus-circle" size="20"></i>
+                <button id="addPotBtn" class="bg-slate-700 hover:bg-slate-600 text-white px-4 py-2 rounded-lg flex items-center space-x-2 transition text-sm font-medium">
+                    <i data-lucide="plus-circle" size="18"></i>
                     <span>Novo Potinho</span>
                 </button>
             </div>
@@ -223,55 +215,55 @@
         </section>
 
         <!-- Espaço para Anúncio -->
-        <div class="bg-gray-200 rounded-lg p-8 mb-8 text-center">
-            <p class="text-gray-500 text-sm">Espaço Publicitário</p>
-            <p class="text-gray-400 text-xs mt-2"><!-- Ad Placeholder 728x90 --></p>
+        <div class="bg-slate-200 rounded-lg p-8 mb-6 text-center border border-slate-200">
+            <p class="text-slate-500 text-sm">Espaço Publicitário</p>
+            <p class="text-slate-400 text-xs mt-2"><!-- Ad Placeholder 728x90 --></p>
         </div>
 
         <!-- Lançamento de Gastos -->
-        <section class="bg-white rounded-2xl shadow-xl p-6 mb-8 animate-slide-in">
+        <section class="bg-white rounded-lg border border-slate-200 shadow-sm p-6 mb-6 animate-slide-in">
             <div class="flex items-center space-x-3 mb-4">
-                <i data-lucide="receipt" class="text-red-500" size="28"></i>
-                <h2 class="text-2xl font-bold text-gray-800">Adicionar Gasto</h2>
+                <i data-lucide="receipt" class="text-slate-600" size="24"></i>
+                <h2 class="text-xl font-bold text-slate-800">Adicionar Gasto</h2>
             </div>
             
             <form id="expenseForm" class="grid grid-cols-1 md:grid-cols-3 gap-4">
                 <div>
-                    <label class="block text-sm font-medium text-gray-700 mb-2">Descrição</label>
+                    <label class="block text-sm font-medium text-slate-700 mb-2">Descrição</label>
                     <input 
                         type="text" 
                         id="expenseDescription" 
                         placeholder="Ex: Mercado, Cinema..." 
-                        class="w-full px-4 py-3 border-2 border-gray-300 rounded-lg focus:border-red-500 focus:outline-none text-base h-12"
+                        class="w-full px-4 py-3 border border-slate-300 rounded-lg focus:border-slate-500 focus:ring-1 focus:ring-slate-500 focus:outline-none text-base h-12"
                         required
                     >
                 </div>
                 <div>
-                    <label class="block text-sm font-medium text-gray-700 mb-2">Valor</label>
+                    <label class="block text-sm font-medium text-slate-700 mb-2">Valor</label>
                     <div class="relative">
-                        <span class="absolute left-3 top-3.5 text-gray-500 font-bold text-base">R$</span>
+                        <span class="absolute left-3 top-3.5 text-slate-500 font-medium text-base">R$</span>
                         <input 
                             type="text" 
                             id="expenseValue" 
                             placeholder="0,00"
-                            class="w-full pl-12 pr-4 py-3 border-2 border-gray-300 rounded-lg focus:border-red-500 focus:outline-none text-base h-12"
+                            class="w-full pl-12 pr-4 py-3 border border-slate-300 rounded-lg focus:border-slate-500 focus:ring-1 focus:ring-slate-500 focus:outline-none text-base h-12"
                             required
                         >
                     </div>
                 </div>
                 <div>
-                    <label class="block text-sm font-medium text-gray-700 mb-2">Potinho</label>
+                    <label class="block text-sm font-medium text-slate-700 mb-2">Potinho</label>
                     <select 
                         id="expensePot" 
-                        class="w-full px-4 py-3 border-2 border-gray-300 rounded-lg focus:border-red-500 focus:outline-none text-base h-12"
+                        class="w-full px-4 py-3 border border-slate-300 rounded-lg focus:border-slate-500 focus:ring-1 focus:ring-slate-500 focus:outline-none text-base h-12"
                         required
                     >
                         <option value="">Selecione...</option>
                     </select>
                 </div>
                 <div class="md:col-span-3">
-                    <button type="submit" class="w-full bg-gradient-to-r from-red-500 to-orange-500 hover:from-red-600 hover:to-orange-600 text-white py-3 rounded-lg font-semibold transition flex items-center justify-center space-x-2 h-12">
-                        <i data-lucide="plus" size="20"></i>
+                    <button type="submit" class="w-full bg-slate-700 hover:bg-slate-600 text-white py-3 rounded-lg font-medium transition flex items-center justify-center space-x-2 h-12">
+                        <i data-lucide="plus" size="18"></i>
                         <span>Adicionar Gasto</span>
                     </button>
                 </div>
@@ -279,10 +271,10 @@
         </section>
 
         <!-- Histórico de Gastos -->
-        <section class="bg-white rounded-2xl shadow-xl p-6 mb-8 animate-slide-in">
+        <section class="bg-white rounded-lg border border-slate-200 shadow-sm p-6 mb-6 animate-slide-in">
             <div class="flex items-center space-x-3 mb-4">
-                <i data-lucide="history" class="text-blue-500" size="28"></i>
-                <h2 class="text-2xl font-bold text-gray-800">Histórico Recente</h2>
+                <i data-lucide="history" class="text-slate-600" size="24"></i>
+                <h2 class="text-xl font-bold text-slate-800">Histórico Recente</h2>
             </div>
             
             <div id="expenseHistory" class="space-y-3">
@@ -291,84 +283,83 @@
         </section>
 
         <!-- Espaço para Anúncio -->
-        <div class="bg-gray-200 rounded-lg p-8 mb-8 text-center">
-            <p class="text-gray-500 text-sm">Espaço Publicitário</p>
-            <p class="text-gray-400 text-xs mt-2"><!-- Ad Placeholder 728x90 --></p>
+        <div class="bg-slate-200 rounded-lg p-8 mb-6 text-center border border-slate-200">
+            <p class="text-slate-500 text-sm">Espaço Publicitário</p>
+            <p class="text-slate-400 text-xs mt-2"><!-- Ad Placeholder 728x90 --></p>
         </div>
 
         <!-- Seção Educativa -->
-        <section class="bg-gradient-to-r from-purple-100 to-pink-100 rounded-2xl shadow-lg p-8 mb-8">
+        <section class="bg-white rounded-lg border border-slate-200 shadow-sm p-6 mb-8">
             <div class="max-w-4xl mx-auto">
-                <h2 class="text-3xl font-bold text-purple-800 mb-6 flex items-center">
-                    <i data-lucide="book-open" class="mr-3" size="32"></i>
+                <h2 class="text-xl font-bold text-slate-800 mb-4 flex items-center">
+                    <i data-lucide="book-open" class="mr-2 text-slate-600" size="24"></i>
                     Como funciona a estratégia dos Potinhos?
                 </h2>
                 
-                <div class="prose prose-lg text-gray-700 space-y-4 mb-8">
+                <div class="prose prose-slate text-slate-700 space-y-4 mb-6 text-sm">
                     <p>
                         A <strong>estratégia dos Potinhos</strong> é uma metodologia simples e visual para organizar suas finanças. 
                         Ela se baseia na famosa <strong>regra 50-30-20</strong>, que divide sua renda em três categorias principais:
                     </p>
                     
-                    <div class="grid md:grid-cols-3 gap-6 my-6">
-                        <div class="bg-white p-6 rounded-xl shadow-md">
-                            <div class="text-4xl mb-3">🏠</div>
-                            <h3 class="text-xl font-bold text-green-600 mb-2">50% - Necessidades</h3>
-                            <p class="text-gray-600 text-sm">
-                                Gastos essenciais como moradia, alimentação, transporte, contas básicas e saúde.
+                    <div class="grid md:grid-cols-3 gap-4 my-4">
+                        <div class="bg-slate-50 border border-slate-200 p-4 rounded-lg">
+                            <div class="text-2xl mb-2">🏠</div>
+                            <h3 class="text-sm font-bold text-slate-800 mb-1">50% – Necessidades</h3>
+                            <p class="text-slate-600 text-xs">
+                                Gastos essenciais: moradia, alimentação, transporte, contas e saúde.
                             </p>
                         </div>
                         
-                        <div class="bg-white p-6 rounded-xl shadow-md">
-                            <div class="text-4xl mb-3">🎮</div>
-                            <h3 class="text-xl font-bold text-blue-600 mb-2">30% - Desejos</h3>
-                            <p class="text-gray-600 text-sm">
-                                Lazer, entretenimento, restaurantes, hobbies e compras não essenciais.
+                        <div class="bg-slate-50 border border-slate-200 p-4 rounded-lg">
+                            <div class="text-2xl mb-2">🎮</div>
+                            <h3 class="text-sm font-bold text-slate-800 mb-1">30% – Desejos</h3>
+                            <p class="text-slate-600 text-xs">
+                                Lazer, entretenimento, restaurantes e compras não essenciais.
                             </p>
                         </div>
                         
-                        <div class="bg-white p-6 rounded-xl shadow-md">
-                            <div class="text-4xl mb-3">💰</div>
-                            <h3 class="text-xl font-bold text-purple-600 mb-2">20% - Futuro</h3>
-                            <p class="text-gray-600 text-sm">
-                                Poupança, investimentos, aposentadoria e pagamento de dívidas.
+                        <div class="bg-slate-50 border border-slate-200 p-4 rounded-lg">
+                            <div class="text-2xl mb-2">💰</div>
+                            <h3 class="text-sm font-bold text-slate-800 mb-1">20% – Futuro</h3>
+                            <p class="text-slate-600 text-xs">
+                                Poupança, investimentos, aposentadoria e quitação de dívidas.
                             </p>
                         </div>
                     </div>
                     
                     <p>
-                        Neste aplicativo, você pode <strong>personalizar seus potinhos</strong>, criar novos, ajustar percentuais 
-                        e acompanhar visualmente quanto já gastou de cada categoria. É uma forma prática de manter suas 
-                        finanças organizadas e evitar surpresas no fim do mês!
+                        Aqui você pode <strong>personalizar seus potinhos</strong>, criar novos, ajustar percentuais 
+                        e acompanhar quanto já gastou de cada categoria.
                     </p>
                 </div>
                 
-                <h3 class="text-2xl font-bold text-purple-800 mb-4 flex items-center">
-                    <i data-lucide="lightbulb" class="mr-3" size="28"></i>
-                    Dicas para não estourar seu orçamento mensal
+                <h3 class="text-lg font-bold text-slate-800 mb-3 flex items-center">
+                    <i data-lucide="lightbulb" class="mr-2 text-slate-600" size="20"></i>
+                    Dicas para não estourar o orçamento
                 </h3>
                 
-                <div class="bg-white rounded-xl shadow-md p-6">
-                    <ul class="space-y-3 text-gray-700">
+                <div class="bg-slate-50 border border-slate-200 rounded-lg p-4">
+                    <ul class="space-y-2 text-slate-700 text-sm">
                         <li class="flex items-start">
-                            <span class="text-green-500 font-bold mr-3 text-xl">✓</span>
-                            <span><strong>Registre todos os gastos:</strong> Por menor que seja, anote! Pequenas despesas somadas fazem diferença.</span>
+                            <span class="text-slate-500 font-bold mr-2">•</span>
+                            <span><strong>Registre todos os gastos</strong> — pequenas despesas somadas fazem diferença.</span>
                         </li>
                         <li class="flex items-start">
-                            <span class="text-green-500 font-bold mr-3 text-xl">✓</span>
-                            <span><strong>Revise semanalmente:</strong> Faça check-ins regulares para ver como está seu progresso.</span>
+                            <span class="text-slate-500 font-bold mr-2">•</span>
+                            <span><strong>Revise semanalmente</strong> — faça check-ins para acompanhar o progresso.</span>
                         </li>
                         <li class="flex items-start">
-                            <span class="text-green-500 font-bold mr-3 text-xl">✓</span>
-                            <span><strong>Priorize o futuro:</strong> Trate os investimentos como uma conta obrigatória, não como o que sobra.</span>
+                            <span class="text-slate-500 font-bold mr-2">•</span>
+                            <span><strong>Priorize o futuro</strong> — trate investimentos como conta obrigatória.</span>
                         </li>
                         <li class="flex items-start">
-                            <span class="text-green-500 font-bold mr-3 text-xl">✓</span>
-                            <span><strong>Use os alertas visuais:</strong> Quando a barra ficar amarela (90%), reduza os gastos daquele potinho.</span>
+                            <span class="text-slate-500 font-bold mr-2">•</span>
+                            <span><strong>Use os alertas</strong> — quando a barra chegar perto do limite, reduza gastos.</span>
                         </li>
                         <li class="flex items-start">
-                            <span class="text-green-500 font-bold mr-3 text-xl">✓</span>
-                            <span><strong>Seja flexível:</strong> Ajuste as porcentagens de acordo com sua realidade, mas mantenha a disciplina.</span>
+                            <span class="text-slate-500 font-bold mr-2">•</span>
+                            <span><strong>Seja flexível</strong> — ajuste as porcentagens à sua realidade com disciplina.</span>
                         </li>
                     </ul>
                 </div>
@@ -378,20 +369,20 @@
     </main>
 
     <!-- Footer -->
-    <footer class="bg-gray-800 text-white py-6 mt-12">
+    <footer class="bg-slate-800 text-slate-300 py-5 mt-10 border-t border-slate-700">
         <div class="container mx-auto px-4 text-center">
-            <p>&copy; 2026 Meu Dinheiro por Potinhos - Organize suas finanças com inteligência</p>
-            <p class="text-gray-400 text-sm mt-2">Seus dados são salvos localmente no seu navegador</p>
+            <p class="text-sm">&copy; 2026 Meu Dinheiro por Potinhos — Controle de orçamento pessoal</p>
+            <p class="text-slate-500 text-xs mt-1">Seus dados são salvos localmente no navegador</p>
         </div>
     </footer>
 
     <!-- Modal para Editar/Criar Potinho -->
-    <div id="potModal" class="hidden fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
-        <div class="bg-white rounded-2xl shadow-2xl max-w-md w-full p-6 animate-slide-in">
+    <div id="potModal" class="hidden fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4">
+        <div class="bg-white rounded-lg border border-slate-200 shadow-xl max-w-md w-full p-6 animate-slide-in">
             <div class="flex items-center justify-between mb-4">
-                <h3 class="text-2xl font-bold text-gray-800" id="modalTitle">Editar Potinho</h3>
-                <button id="closeModalBtn" class="text-gray-500 hover:text-gray-700">
-                    <i data-lucide="x" size="24"></i>
+                <h3 class="text-xl font-bold text-slate-800" id="modalTitle">Editar Potinho</h3>
+                <button id="closeModalBtn" class="text-slate-500 hover:text-slate-700">
+                    <i data-lucide="x" size="22"></i>
                 </button>
             </div>
             
@@ -399,39 +390,39 @@
                 <input type="hidden" id="potId">
                 
                 <div>
-                    <label class="block text-sm font-medium text-gray-700 mb-2">Nome do Potinho</label>
+                    <label class="block text-sm font-medium text-slate-700 mb-2">Nome do Potinho</label>
                     <input 
                         type="text" 
                         id="potName" 
                         placeholder="Ex: Viagens" 
-                        class="w-full px-4 py-3 border-2 border-gray-300 rounded-lg focus:border-purple-500 focus:outline-none text-base h-12"
+                        class="w-full px-4 py-3 border border-slate-300 rounded-lg focus:border-slate-500 focus:ring-1 focus:ring-slate-500 focus:outline-none text-base h-12"
                         required
                     >
                 </div>
                 
                 <div>
-                    <div class="bg-gradient-to-r from-purple-50 to-pink-50 rounded-lg p-4 mb-3">
+                    <div class="bg-slate-50 border border-slate-200 rounded-lg p-4 mb-3">
                         <div class="flex items-center justify-between mb-3">
                             <div>
-                                <label class="block text-xs font-medium text-gray-600 mb-1">Porcentagem</label>
-                                <div class="text-3xl font-bold text-purple-600" id="percentageValue">0%</div>
+                                <label class="block text-xs font-medium text-slate-500 mb-1">Porcentagem</label>
+                                <div class="text-2xl font-bold text-slate-800" id="percentageValue">0%</div>
                             </div>
                             <div class="text-right">
-                                <label class="block text-xs font-medium text-gray-600 mb-1">Valor Alocado</label>
-                                <div id="allocatedValue" class="text-2xl font-bold text-green-600 transition-all">R$ 0,00</div>
+                                <label class="block text-xs font-medium text-slate-500 mb-1">Valor Alocado</label>
+                                <div id="allocatedValue" class="text-xl font-bold text-slate-800 transition-all">R$ 0,00</div>
                             </div>
                         </div>
                         <div>
-                            <div class="w-full bg-white rounded-full h-2 overflow-hidden shadow-inner">
-                                <div id="potAllocationBar" class="h-full bg-gradient-to-r from-purple-500 to-pink-500 rounded-full transition-all duration-500" style="width: 0%"></div>
+                            <div class="w-full bg-slate-200 rounded-full h-1.5 overflow-hidden">
+                                <div id="potAllocationBar" class="h-full bg-slate-600 rounded-full transition-all duration-500" style="width: 0%"></div>
                             </div>
-                            <p class="text-xs text-gray-500 text-center mt-1">
+                            <p class="text-xs text-slate-500 text-center mt-1">
                                 <span id="potAllocationText">0% da renda total</span>
                             </p>
                         </div>
                     </div>
-                    <div id="noIncomeWarning" class="hidden bg-yellow-50 border border-yellow-300 rounded-lg p-3 mb-3">
-                        <p class="text-sm text-yellow-800 flex items-start">
+                    <div id="noIncomeWarning" class="hidden bg-amber-50 border border-amber-200 rounded-lg p-3 mb-3">
+                        <p class="text-sm text-amber-800 flex items-start">
                             <i data-lucide="info" size="16" class="mr-2 mt-0.5 flex-shrink-0"></i>
                             <span>⚠️ Configure sua renda mensal primeiro para definir valores e porcentagens para os potinhos.</span>
                         </p>
@@ -446,9 +437,9 @@
                             max="100"
                             step="0.5"
                             value="0"
-                            class="w-full h-3 bg-gray-200 rounded-lg appearance-none cursor-pointer slider"
+                            class="w-full h-3 bg-slate-200 rounded-lg appearance-none cursor-pointer slider"
                         >
-                        <div class="flex justify-between text-xs text-gray-400 mt-1">
+                        <div class="flex justify-between text-xs text-slate-500 mt-1">
                             <span>0%</span>
                             <span>25%</span>
                             <span>50%</span>
@@ -465,22 +456,22 @@
                         min="0"
                         max="100"
                         step="0.5"
-                        class="w-full px-4 py-3 border-2 border-gray-300 rounded-lg focus:border-purple-500 focus:outline-none text-center text-base h-12"
+                        class="w-full px-4 py-3 border border-slate-300 rounded-lg focus:border-slate-500 focus:ring-1 focus:ring-slate-500 focus:outline-none text-center text-base h-12"
                         required
                     >
                     
                     <!-- Feedback de disponibilidade -->
-                    <div class="mt-3 p-3 rounded-lg" id="percentageFeedback">
+                    <div class="mt-3 p-3 rounded-lg bg-slate-50 border border-slate-200" id="percentageFeedback">
                         <div class="flex justify-between items-center text-sm mb-2">
-                            <span class="text-gray-600">Total alocado:</span>
-                            <span id="totalPercentage" class="font-bold text-lg">0%</span>
+                            <span class="text-slate-600">Total alocado:</span>
+                            <span id="totalPercentage" class="font-bold text-slate-800">0%</span>
                         </div>
                         <div class="flex justify-between items-center text-sm">
-                            <span class="text-gray-600">Disponível:</span>
-                            <span id="availablePercentage" class="font-bold text-lg text-green-600">100%</span>
+                            <span class="text-slate-600">Disponível:</span>
+                            <span id="availablePercentage" class="font-bold text-slate-800">100%</span>
                         </div>
-                        <div class="w-full bg-gray-200 rounded-full h-2 mt-2">
-                            <div id="totalPercentageBar" class="h-full rounded-full transition-all" style="width: 0%"></div>
+                        <div class="w-full bg-slate-200 rounded-full h-1.5 mt-2">
+                            <div id="totalPercentageBar" class="h-full bg-slate-500 rounded-full transition-all" style="width: 0%"></div>
                         </div>
                     </div>
                     
@@ -491,35 +482,35 @@
                 </div>
                 
                 <div>
-                    <label class="block text-sm font-medium text-gray-700 mb-2">Emoji/Ícone</label>
+                    <label class="block text-sm font-medium text-slate-700 mb-2">Emoji / Ícone</label>
                     <input 
                         type="text" 
                         id="potIcon" 
                         placeholder="🏠" 
                         maxlength="2"
-                        class="w-full px-4 py-3 border-2 border-gray-300 rounded-lg focus:border-purple-500 focus:outline-none text-2xl text-center h-12"
+                        class="w-full px-4 py-3 border border-slate-300 rounded-lg focus:border-slate-500 focus:ring-1 focus:ring-slate-500 focus:outline-none text-2xl text-center h-12"
                     >
                 </div>
                 
                 <div>
-                    <label class="block text-sm font-medium text-gray-700 mb-2">Cor</label>
+                    <label class="block text-sm font-medium text-slate-700 mb-2">Cor</label>
                     <div class="grid grid-cols-6 gap-2">
-                        <button type="button" class="color-btn w-10 h-10 rounded-lg bg-green-400 hover:scale-110 transition" data-color="green"></button>
-                        <button type="button" class="color-btn w-10 h-10 rounded-lg bg-blue-400 hover:scale-110 transition" data-color="blue"></button>
-                        <button type="button" class="color-btn w-10 h-10 rounded-lg bg-purple-400 hover:scale-110 transition" data-color="purple"></button>
-                        <button type="button" class="color-btn w-10 h-10 rounded-lg bg-pink-400 hover:scale-110 transition" data-color="pink"></button>
-                        <button type="button" class="color-btn w-10 h-10 rounded-lg bg-yellow-400 hover:scale-110 transition" data-color="yellow"></button>
-                        <button type="button" class="color-btn w-10 h-10 rounded-lg bg-red-400 hover:scale-110 transition" data-color="red"></button>
+                        <button type="button" class="color-btn w-9 h-9 rounded-md bg-emerald-500 hover:ring-2 hover:ring-emerald-700 transition" data-color="green"></button>
+                        <button type="button" class="color-btn w-9 h-9 rounded-md bg-sky-500 hover:ring-2 hover:ring-sky-700 transition" data-color="blue"></button>
+                        <button type="button" class="color-btn w-9 h-9 rounded-md bg-violet-500 hover:ring-2 hover:ring-violet-700 transition" data-color="purple"></button>
+                        <button type="button" class="color-btn w-9 h-9 rounded-md bg-rose-500 hover:ring-2 hover:ring-rose-700 transition" data-color="pink"></button>
+                        <button type="button" class="color-btn w-9 h-9 rounded-md bg-amber-500 hover:ring-2 hover:ring-amber-700 transition" data-color="yellow"></button>
+                        <button type="button" class="color-btn w-9 h-9 rounded-md bg-red-500 hover:ring-2 hover:ring-red-700 transition" data-color="red"></button>
                     </div>
                     <input type="hidden" id="potColor" value="green">
                 </div>
                 
                 <div class="flex space-x-3 pt-4">
-                    <button type="submit" class="flex-1 bg-gradient-to-r from-purple-500 to-pink-500 hover:from-purple-600 hover:to-pink-600 text-white py-3 rounded-lg font-semibold transition">
+                    <button type="submit" class="flex-1 bg-slate-700 hover:bg-slate-600 text-white py-3 rounded-lg font-medium transition">
                         Salvar
                     </button>
-                    <button type="button" id="deletePotBtn" class="hidden bg-red-500 hover:bg-red-600 text-white px-4 py-3 rounded-lg transition">
-                        <i data-lucide="trash-2" size="20"></i>
+                    <button type="button" id="deletePotBtn" class="hidden bg-red-600 hover:bg-red-700 text-white px-4 py-3 rounded-lg transition text-sm font-medium">
+                        <i data-lucide="trash-2" size="18"></i>
                     </button>
                 </div>
             </form>
@@ -527,54 +518,51 @@
     </div>
 
     <!-- Modal de Exportação -->
-    <div id="exportModal" class="hidden fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
-        <div class="bg-white rounded-2xl shadow-2xl max-w-lg w-full p-6 animate-slide-in">
+    <div id="exportModal" class="hidden fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4">
+        <div class="bg-white rounded-lg border border-slate-200 shadow-xl max-w-lg w-full p-6 animate-slide-in">
             <div class="flex items-center justify-between mb-4">
-                <h3 class="text-2xl font-bold text-gray-800">Exportar / Compartilhar</h3>
-                <button id="closeExportModalBtn" class="text-gray-500 hover:text-gray-700">
-                    <i data-lucide="x" size="24"></i>
+                <h3 class="text-xl font-bold text-slate-800">Exportar / Compartilhar</h3>
+                <button id="closeExportModalBtn" class="text-slate-500 hover:text-slate-700">
+                    <i data-lucide="x" size="22"></i>
                 </button>
             </div>
             
             <div class="space-y-3">
-                <p class="text-sm text-gray-600 mb-3">Escolha como deseja salvar ou compartilhar seu controle financeiro:</p>
+                <p class="text-sm text-slate-600 mb-3">Escolha como deseja salvar ou compartilhar seu controle financeiro:</p>
                 
-                <!-- Exportações Visuais (Principais) -->
                 <div class="space-y-2">
-                    <button id="exportPDFBtn" class="w-full bg-gradient-to-r from-red-500 to-orange-500 hover:from-red-600 hover:to-orange-600 text-white py-3 rounded-lg font-semibold transition flex items-center justify-center space-x-2 shadow-md">
-                        <i data-lucide="file-down" size="20"></i>
+                    <button id="exportPDFBtn" class="w-full bg-slate-700 hover:bg-slate-600 text-white py-3 rounded-lg font-medium transition flex items-center justify-center space-x-2">
+                        <i data-lucide="file-down" size="18"></i>
                         <span>Baixar como PDF</span>
                     </button>
                     
-                    <button id="exportImageBtn" class="w-full bg-gradient-to-r from-purple-500 to-pink-500 hover:from-purple-600 hover:to-pink-600 text-white py-3 rounded-lg font-semibold transition flex items-center justify-center space-x-2 shadow-md">
-                        <i data-lucide="image" size="20"></i>
+                    <button id="exportImageBtn" class="w-full bg-slate-700 hover:bg-slate-600 text-white py-3 rounded-lg font-medium transition flex items-center justify-center space-x-2">
+                        <i data-lucide="image" size="18"></i>
                         <span>Salvar como Imagem (PNG)</span>
                     </button>
                     
-                    <button id="exportWhatsAppBtn" class="w-full bg-green-500 hover:bg-green-600 text-white py-3 rounded-lg font-semibold transition flex items-center justify-center space-x-2 shadow-md">
-                        <i data-lucide="message-circle" size="20"></i>
+                    <button id="exportWhatsAppBtn" class="w-full bg-slate-600 hover:bg-slate-500 text-white py-3 rounded-lg font-medium transition flex items-center justify-center space-x-2 border border-slate-500">
+                        <i data-lucide="message-circle" size="18"></i>
                         <span>Compartilhar no WhatsApp</span>
                     </button>
                 </div>
                 
-                <!-- Separador -->
                 <div class="relative my-4">
                     <div class="absolute inset-0 flex items-center">
-                        <div class="w-full border-t border-gray-300"></div>
+                        <div class="w-full border-t border-slate-200"></div>
                     </div>
                     <div class="relative flex justify-center text-sm">
-                        <span class="px-2 bg-white text-gray-500">Exportar dados brutos</span>
+                        <span class="px-2 bg-white text-slate-500">Exportar dados brutos</span>
                     </div>
                 </div>
                 
-                <!-- Exportações de Dados (Secundárias) -->
                 <div class="grid grid-cols-2 gap-2">
-                    <button id="exportJSONBtn" class="bg-blue-500 hover:bg-blue-600 text-white py-2 rounded-lg font-medium transition flex items-center justify-center space-x-2 text-sm">
+                    <button id="exportJSONBtn" class="bg-slate-600 hover:bg-slate-500 text-white py-2 rounded-lg font-medium transition flex items-center justify-center space-x-2 text-sm">
                         <i data-lucide="file-code" size="16"></i>
                         <span>JSON</span>
                     </button>
                     
-                    <button id="exportCSVBtn" class="bg-indigo-500 hover:bg-indigo-600 text-white py-2 rounded-lg font-medium transition flex items-center justify-center space-x-2 text-sm">
+                    <button id="exportCSVBtn" class="bg-slate-600 hover:bg-slate-500 text-white py-2 rounded-lg font-medium transition flex items-center justify-center space-x-2 text-sm">
                         <i data-lucide="file-spreadsheet" size="16"></i>
                         <span>CSV</span>
                     </button>
@@ -584,32 +572,32 @@
     </div>
 
     <!-- Loading Overlay para Exportação -->
-    <div id="exportLoading" class="hidden fixed inset-0 bg-black bg-opacity-75 flex items-center justify-center z-50">
-        <div class="bg-white rounded-2xl p-8 text-center animate-pulse-scale">
-            <div class="w-16 h-16 border-4 border-purple-500 border-t-transparent rounded-full animate-spin mx-auto mb-4"></div>
-            <p class="text-xl font-bold text-gray-800">Gerando exportação...</p>
-            <p class="text-sm text-gray-600 mt-2">Aguarde um momento</p>
+    <div id="exportLoading" class="hidden fixed inset-0 bg-black/60 flex items-center justify-center z-50">
+        <div class="bg-white rounded-lg border border-slate-200 p-8 text-center">
+            <div class="w-12 h-12 border-2 border-slate-400 border-t-transparent rounded-full animate-spin mx-auto mb-4"></div>
+            <p class="text-lg font-semibold text-slate-800">Gerando exportação...</p>
+            <p class="text-sm text-slate-600 mt-2">Aguarde um momento</p>
         </div>
     </div>
 
     <!-- Modal de Confirmação de Reset -->
-    <div id="resetModal" class="hidden fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
-        <div class="bg-white rounded-2xl shadow-2xl max-w-md w-full p-6 animate-slide-in">
+    <div id="resetModal" class="hidden fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4">
+        <div class="bg-white rounded-lg border border-slate-200 shadow-xl max-w-md w-full p-6 animate-slide-in">
             <div class="text-center mb-6">
-                <div class="w-16 h-16 bg-red-100 rounded-full flex items-center justify-center mx-auto mb-4">
-                    <i data-lucide="alert-triangle" class="text-red-600" size="32"></i>
+                <div class="w-14 h-14 bg-red-50 border border-red-200 rounded-full flex items-center justify-center mx-auto mb-4">
+                    <i data-lucide="alert-triangle" class="text-red-600" size="28"></i>
                 </div>
-                <h3 class="text-2xl font-bold text-gray-800 mb-2">Reiniciar Todos os Dados?</h3>
-                <p class="text-gray-600">
+                <h3 class="text-xl font-bold text-slate-800 mb-2">Reiniciar todos os dados?</h3>
+                <p class="text-slate-600 text-sm">
                     Esta ação é <strong class="text-red-600">irreversível</strong> e irá:
                 </p>
             </div>
 
-            <div class="bg-red-50 border-2 border-red-200 rounded-lg p-4 mb-6">
-                <ul class="space-y-2 text-sm text-gray-700">
+            <div class="bg-slate-50 border border-slate-200 rounded-lg p-4 mb-4">
+                <ul class="space-y-2 text-sm text-slate-700">
                     <li class="flex items-start">
                         <span class="text-red-500 mr-2">✗</span>
-                        <span>Apagar todos os seus gastos registrados</span>
+                        <span>Apagar todos os gastos registrados</span>
                     </li>
                     <li class="flex items-start">
                         <span class="text-red-500 mr-2">✗</span>
@@ -620,26 +608,26 @@
                         <span>Zerar a renda configurada</span>
                     </li>
                     <li class="flex items-start">
-                        <span class="text-green-500 mr-2">✓</span>
+                        <span class="text-emerald-600 mr-2">✓</span>
                         <span>Restaurar configuração padrão (50-30-20)</span>
                     </li>
                 </ul>
             </div>
 
-            <div class="bg-yellow-50 border border-yellow-300 rounded-lg p-3 mb-6">
-                <p class="text-sm text-yellow-800 flex items-start">
+            <div class="bg-amber-50 border border-amber-200 rounded-lg p-3 mb-4">
+                <p class="text-sm text-amber-800 flex items-start">
                     <i data-lucide="lightbulb" size="16" class="mr-2 mt-0.5 flex-shrink-0"></i>
-                    <span><strong>Dica:</strong> Exporte seus dados antes de reiniciar para não perder seu histórico!</span>
+                    <span><strong>Dica:</strong> Exporte seus dados antes de reiniciar para não perder o histórico.</span>
                 </p>
             </div>
 
             <div class="flex space-x-3">
-                <button id="cancelResetBtn" class="flex-1 bg-gray-200 hover:bg-gray-300 text-gray-800 py-3 rounded-lg font-semibold transition">
+                <button id="cancelResetBtn" class="flex-1 bg-slate-200 hover:bg-slate-300 text-slate-800 py-3 rounded-lg font-medium transition">
                     Cancelar
                 </button>
-                <button id="confirmResetBtn" class="flex-1 bg-red-500 hover:bg-red-600 text-white py-3 rounded-lg font-semibold transition flex items-center justify-center space-x-2">
-                    <i data-lucide="trash-2" size="20"></i>
-                    <span>Sim, Reiniciar</span>
+                <button id="confirmResetBtn" class="flex-1 bg-red-600 hover:bg-red-700 text-white py-3 rounded-lg font-medium transition flex items-center justify-center space-x-2">
+                    <i data-lucide="trash-2" size="18"></i>
+                    <span>Sim, reiniciar</span>
                 </button>
             </div>
         </div>
@@ -754,8 +742,8 @@
             
             const remainingEl = document.getElementById('totalRemainingDisplay');
             remainingEl.textContent = formatCurrency(totalRemaining);
-            remainingEl.classList.remove('text-green-600', 'text-red-600', 'text-amber-700');
-            remainingEl.classList.add(totalRemaining >= 0 ? 'text-green-600' : 'text-red-600');
+            remainingEl.classList.remove('text-emerald-600', 'text-red-600', 'text-slate-800');
+            remainingEl.classList.add(totalRemaining >= 0 ? 'text-emerald-600' : 'text-red-600');
             
             const distributionDisplay = document.getElementById('totalDistributionDisplay');
             const distributionBar = document.getElementById('distributionBar');
@@ -763,22 +751,18 @@
             distributionDisplay.textContent = totalDistribution.toFixed(1) + '%';
             distributionBar.style.width = Math.min(totalDistribution, 100) + '%';
             
-            // Cores baseadas na distribuição
+            // Cores da barra de distribuição (neutras, vermelho só se > 100%)
+            distributionDisplay.classList.remove('text-red-700', 'text-amber-700', 'text-slate-800');
+            distributionBar.classList.remove('bg-red-500', 'bg-amber-500', 'bg-slate-500');
             if (totalDistribution > 100) {
-                distributionDisplay.classList.remove('text-blue-700', 'text-yellow-700');
                 distributionDisplay.classList.add('text-red-700');
-                distributionBar.classList.remove('bg-blue-500', 'bg-yellow-500');
                 distributionBar.classList.add('bg-red-500');
             } else if (totalDistribution >= 90) {
-                distributionDisplay.classList.remove('text-blue-700', 'text-red-700');
-                distributionDisplay.classList.add('text-yellow-700');
-                distributionBar.classList.remove('bg-blue-500', 'bg-red-500');
-                distributionBar.classList.add('bg-yellow-500');
+                distributionDisplay.classList.add('text-amber-700');
+                distributionBar.classList.add('bg-amber-500');
             } else {
-                distributionDisplay.classList.remove('text-yellow-700', 'text-red-700');
-                distributionDisplay.classList.add('text-blue-700');
-                distributionBar.classList.remove('bg-yellow-500', 'bg-red-500');
-                distributionBar.classList.add('bg-blue-500');
+                distributionDisplay.classList.add('text-slate-800');
+                distributionBar.classList.add('bg-slate-500');
             }
         }
 
@@ -793,33 +777,33 @@
                 const percentage = allocated > 0 ? (spent / allocated) * 100 : 0;
                 const remaining = allocated - spent;
 
-                let barColor = 'bg-green-500';
-                let alertClass = '';
+                let barColor = 'bg-slate-500';
+                let alertClass = 'border-slate-200';
                 let alertMessage = '';
 
                 if (percentage >= 100) {
                     barColor = 'bg-red-500';
-                    alertClass = 'border-red-500 bg-red-50';
-                    alertMessage = '<div class="bg-red-500 text-white px-3 py-1 rounded-full text-xs font-bold flex items-center"><i data-lucide="alert-triangle" size="14" class="mr-1"></i> Limite Excedido!</div>';
+                    alertClass = 'border-red-300 bg-red-50/50';
+                    alertMessage = '<div class="bg-red-600 text-white px-3 py-1.5 rounded text-xs font-medium flex items-center"><i data-lucide="alert-triangle" size="14" class="mr-1"></i> Limite excedido</div>';
                 } else if (percentage >= 90) {
-                    barColor = 'bg-yellow-500';
-                    alertClass = 'border-yellow-500 bg-yellow-50';
-                    alertMessage = '<div class="bg-yellow-500 text-white px-3 py-1 rounded-full text-xs font-bold flex items-center"><i data-lucide="alert-circle" size="14" class="mr-1"></i> Atenção: 90%</div>';
+                    barColor = 'bg-amber-500';
+                    alertClass = 'border-amber-300 bg-amber-50/50';
+                    alertMessage = '<div class="bg-amber-600 text-white px-3 py-1.5 rounded text-xs font-medium flex items-center"><i data-lucide="alert-circle" size="14" class="mr-1"></i> Atenção: 90%</div>';
                 }
 
                 const card = document.createElement('div');
-                card.className = `pot-card bg-white rounded-xl shadow-lg p-6 border-2 ${alertClass} fade-in`;
+                card.className = `pot-card bg-white rounded-lg border p-5 ${alertClass} fade-in shadow-sm`;
                 card.innerHTML = `
                     <div class="flex items-center justify-between mb-4">
                         <div class="flex items-center space-x-3">
-                            <div class="text-4xl">${pot.icon || '📦'}</div>
+                            <div class="text-3xl">${pot.icon || '📦'}</div>
                             <div>
-                                <h3 class="text-xl font-bold text-gray-800">${pot.name}</h3>
-                                <p class="text-sm text-gray-500">${pot.percentage}% da renda</p>
+                                <h3 class="text-lg font-bold text-slate-800">${pot.name}</h3>
+                                <p class="text-xs text-slate-500">${pot.percentage}% da renda</p>
                             </div>
                         </div>
-                        <button onclick="editPot('${pot.id}')" class="text-gray-400 hover:text-gray-600 transition">
-                            <i data-lucide="edit-2" size="20"></i>
+                        <button onclick="editPot('${pot.id}')" class="text-slate-400 hover:text-slate-600 transition">
+                            <i data-lucide="edit-2" size="18"></i>
                         </button>
                     </div>
 
@@ -827,23 +811,23 @@
 
                     <div class="space-y-2 mb-4">
                         <div class="flex justify-between text-sm">
-                            <span class="text-gray-600">Orçado:</span>
-                            <span class="font-bold text-${pot.color}-600">${formatCurrency(allocated)}</span>
+                            <span class="text-slate-600">Orçado:</span>
+                            <span class="font-bold text-slate-800">${formatCurrency(allocated)}</span>
                         </div>
                         <div class="flex justify-between text-sm">
-                            <span class="text-gray-600">Gasto:</span>
-                            <span class="font-bold text-gray-800">${formatCurrency(spent)}</span>
+                            <span class="text-slate-600">Gasto:</span>
+                            <span class="font-semibold text-slate-800">${formatCurrency(spent)}</span>
                         </div>
                         <div class="flex justify-between text-sm">
-                            <span class="text-gray-600">Restante:</span>
-                            <span class="font-bold ${remaining >= 0 ? 'text-green-600' : 'text-red-600'}">${formatCurrency(remaining)}</span>
+                            <span class="text-slate-600">Restante:</span>
+                            <span class="font-bold ${remaining >= 0 ? 'text-emerald-600' : 'text-red-600'}">${formatCurrency(remaining)}</span>
                         </div>
                     </div>
 
-                    <div class="w-full bg-gray-200 rounded-full h-4 overflow-hidden">
+                    <div class="w-full bg-slate-200 rounded-full h-3 overflow-hidden">
                         <div class="progress-bar ${barColor} h-full rounded-full transition-all" style="width: ${Math.min(percentage, 100)}%"></div>
                     </div>
-                    <p class="text-xs text-gray-500 text-center mt-2">${percentage.toFixed(1)}% utilizado</p>
+                    <p class="text-xs text-slate-500 text-center mt-1.5">${percentage.toFixed(1)}% utilizado</p>
                 `;
                 container.appendChild(card);
             });
@@ -869,7 +853,7 @@
             const container = document.getElementById('expenseHistory');
             
             if (state.expenses.length === 0) {
-                container.innerHTML = '<p class="text-gray-500 text-center py-8">Nenhum gasto registrado ainda.</p>';
+                container.innerHTML = '<p class="text-slate-500 text-center py-8">Nenhum gasto registrado ainda.</p>';
                 return;
             }
 
@@ -879,19 +863,19 @@
             recent.forEach(expense => {
                 const pot = state.pots.find(p => p.id === expense.potId);
                 const item = document.createElement('div');
-                item.className = 'flex items-center justify-between p-4 bg-gray-50 rounded-lg hover:bg-gray-100 transition fade-in';
+                item.className = 'flex items-center justify-between p-3 bg-slate-50 rounded-lg border border-slate-100 hover:bg-slate-100/80 transition fade-in';
                 item.innerHTML = `
                     <div class="flex items-center space-x-3 flex-1">
-                        <div class="text-2xl">${pot ? pot.icon : '📦'}</div>
+                        <div class="text-xl">${pot ? pot.icon : '📦'}</div>
                         <div class="flex-1">
-                            <p class="font-semibold text-gray-800">${expense.description}</p>
-                            <p class="text-xs text-gray-500">${pot ? pot.name : 'Desconhecido'} • ${new Date(expense.date).toLocaleDateString('pt-BR')}</p>
+                            <p class="font-medium text-slate-800">${expense.description}</p>
+                            <p class="text-xs text-slate-500">${pot ? pot.name : 'Desconhecido'} • ${new Date(expense.date).toLocaleDateString('pt-BR')}</p>
                         </div>
                     </div>
                     <div class="flex items-center space-x-3">
-                        <span class="font-bold text-red-600">${formatCurrency(expense.value)}</span>
-                        <button onclick="deleteExpense('${expense.id}')" class="text-red-500 hover:text-red-700 transition">
-                            <i data-lucide="trash-2" size="18"></i>
+                        <span class="font-semibold text-slate-800">${formatCurrency(expense.value)}</span>
+                        <button onclick="deleteExpense('${expense.id}')" class="text-slate-400 hover:text-red-600 transition">
+                            <i data-lucide="trash-2" size="16"></i>
                         </button>
                     </div>
                 `;
@@ -1020,14 +1004,14 @@
             if (!state.income || state.income === 0) {
                 noIncomeWarning.classList.remove('hidden');
                 if (allocatedValueDisplay) {
-                    allocatedValueDisplay.classList.add('text-gray-400');
-                    allocatedValueDisplay.classList.remove('text-green-600');
+                    allocatedValueDisplay.classList.add('text-slate-400');
+                    allocatedValueDisplay.classList.remove('text-slate-800');
                 }
             } else {
                 noIncomeWarning.classList.add('hidden');
                 if (allocatedValueDisplay) {
-                    allocatedValueDisplay.classList.remove('text-gray-400');
-                    allocatedValueDisplay.classList.add('text-green-600');
+                    allocatedValueDisplay.classList.remove('text-slate-400');
+                    allocatedValueDisplay.classList.add('text-slate-800');
                 }
             }
             
@@ -1064,14 +1048,14 @@
                 if (!state.income || state.income === 0) {
                     noIncomeWarning.classList.remove('hidden');
                     if (allocatedValueDisplay) {
-                        allocatedValueDisplay.classList.add('text-gray-400');
-                        allocatedValueDisplay.classList.remove('text-green-600');
+                        allocatedValueDisplay.classList.add('text-slate-400');
+                        allocatedValueDisplay.classList.remove('text-slate-800');
                     }
                 } else {
                     noIncomeWarning.classList.add('hidden');
                     if (allocatedValueDisplay) {
-                        allocatedValueDisplay.classList.remove('text-gray-400');
-                        allocatedValueDisplay.classList.add('text-green-600');
+                        allocatedValueDisplay.classList.remove('text-slate-400');
+                        allocatedValueDisplay.classList.add('text-slate-800');
                     }
                 }
                 
@@ -1156,14 +1140,14 @@
             if (!state.income || state.income === 0) {
                 if (noIncomeWarning) noIncomeWarning.classList.remove('hidden');
                 if (allocatedValueDisplay) {
-                    allocatedValueDisplay.classList.add('text-gray-400');
-                    allocatedValueDisplay.classList.remove('text-green-600');
+                    allocatedValueDisplay.classList.add('text-slate-400');
+                    allocatedValueDisplay.classList.remove('text-slate-800');
                 }
             } else {
                 if (noIncomeWarning) noIncomeWarning.classList.add('hidden');
                 if (allocatedValueDisplay) {
-                    allocatedValueDisplay.classList.remove('text-gray-400');
-                    allocatedValueDisplay.classList.add('text-green-600');
+                    allocatedValueDisplay.classList.remove('text-slate-400');
+                    allocatedValueDisplay.classList.add('text-slate-800');
                 }
             }
             
@@ -1207,36 +1191,34 @@
             const totalSpan = document.getElementById('totalPercentage');
             
             if (total > 100) {
-                // Vermelho - ultrapassou
-                feedback.classList.remove('bg-green-50', 'bg-yellow-50');
-                feedback.classList.add('bg-red-50', 'border', 'border-red-300');
-                progressBar.classList.remove('bg-green-500', 'bg-yellow-500');
+                feedback.classList.remove('bg-slate-50', 'bg-amber-50', 'border-amber-200');
+                feedback.classList.add('bg-red-50', 'border-red-200');
+                progressBar.classList.remove('bg-slate-500', 'bg-amber-500');
                 progressBar.classList.add('bg-red-500');
-                totalSpan.classList.remove('text-green-600', 'text-yellow-600');
+                totalSpan.classList.remove('text-slate-800', 'text-amber-700');
                 totalSpan.classList.add('text-red-600');
-                availableSpan.classList.remove('text-green-600', 'text-yellow-600');
+                availableSpan.classList.remove('text-slate-800', 'text-emerald-600');
                 availableSpan.classList.add('text-red-600');
                 warning.classList.remove('hidden');
             } else if (total >= 90) {
-                // Amarelo - próximo do limite
-                feedback.classList.remove('bg-green-50', 'bg-red-50', 'border-red-300');
-                feedback.classList.add('bg-yellow-50', 'border', 'border-yellow-300');
-                progressBar.classList.remove('bg-green-500', 'bg-red-500');
-                progressBar.classList.add('bg-yellow-500');
-                totalSpan.classList.remove('text-green-600', 'text-red-600');
-                totalSpan.classList.add('text-yellow-600');
+                feedback.classList.remove('bg-slate-50', 'bg-red-50', 'border-red-200');
+                feedback.classList.add('bg-amber-50', 'border-amber-200');
+                progressBar.classList.remove('bg-slate-500', 'bg-red-500');
+                progressBar.classList.add('bg-amber-500');
+                totalSpan.classList.remove('text-slate-800', 'text-red-600');
+                totalSpan.classList.add('text-amber-700');
                 availableSpan.classList.remove('text-red-600');
-                availableSpan.classList.add('text-green-600');
+                availableSpan.classList.add('text-slate-800');
                 warning.classList.add('hidden');
             } else {
-                // Verde - tudo ok
-                feedback.classList.remove('bg-yellow-50', 'bg-red-50', 'border', 'border-red-300', 'border-yellow-300');
-                feedback.classList.add('bg-green-50');
-                progressBar.classList.remove('bg-yellow-500', 'bg-red-500');
-                progressBar.classList.add('bg-green-500');
-                totalSpan.classList.remove('text-yellow-600', 'text-red-600');
-                totalSpan.classList.add('text-green-600');
-                availableSpan.classList.add('text-green-600');
+                feedback.classList.remove('bg-amber-50', 'bg-red-50', 'border-amber-200', 'border-red-200');
+                feedback.classList.add('bg-slate-50');
+                progressBar.classList.remove('bg-amber-500', 'bg-red-500');
+                progressBar.classList.add('bg-slate-500');
+                totalSpan.classList.remove('text-amber-700', 'text-red-600');
+                totalSpan.classList.add('text-slate-800');
+                availableSpan.classList.remove('text-red-600');
+                availableSpan.classList.add('text-slate-800');
                 warning.classList.add('hidden');
             }
             
@@ -1674,7 +1656,7 @@
         function showNotification(message, type = 'success') {
             const notification = document.createElement('div');
             notification.className = `fixed top-4 right-4 z-50 px-6 py-3 rounded-lg shadow-lg text-white font-semibold animate-slide-in max-w-md ${
-                type === 'success' ? 'bg-green-500' : 'bg-red-500'
+                type === 'success' ? 'bg-slate-700' : 'bg-red-600'
             }`;
             notification.textContent = message;
             document.body.appendChild(notification);
