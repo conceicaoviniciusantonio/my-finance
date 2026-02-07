@@ -181,10 +181,18 @@
             </div>
             
             <!-- Display Total -->
-            <div class="mt-4 grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div class="mt-4 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
                 <div class="p-4 bg-gradient-to-r from-purple-100 to-pink-100 rounded-lg">
                     <p class="text-sm text-gray-700 mb-1">Renda Total Configurada:</p>
                     <p class="text-3xl font-bold text-purple-700" id="totalIncomeDisplay">R$ 0,00</p>
+                </div>
+                <div class="p-4 bg-gradient-to-r from-emerald-100 to-teal-100 rounded-lg">
+                    <p class="text-sm text-gray-700 mb-1">Renda Total Usada:</p>
+                    <p class="text-3xl font-bold text-emerald-700" id="totalIncomeUsedDisplay">R$ 0,00</p>
+                </div>
+                <div class="p-4 bg-gradient-to-r from-amber-100 to-orange-100 rounded-lg">
+                    <p class="text-sm text-gray-700 mb-1">Total Sobrando:</p>
+                    <p class="text-3xl font-bold" id="totalRemainingDisplay">R$ 0,00</p>
                 </div>
                 <div class="p-4 bg-gradient-to-r from-blue-100 to-indigo-100 rounded-lg">
                     <p class="text-sm text-gray-700 mb-1">Distribuição dos Potinhos:</p>
@@ -737,8 +745,18 @@
             }
             document.getElementById('totalIncomeDisplay').textContent = formatCurrency(state.income);
             
-            // Calcular distribuição total
+            // Calcular distribuição total, renda usada e total sobrando
             const totalDistribution = state.pots.reduce((sum, pot) => sum + pot.percentage, 0);
+            const totalIncomeUsed = state.expenses.reduce((sum, e) => sum + e.value, 0);
+            const totalRemaining = state.income - totalIncomeUsed;
+            
+            document.getElementById('totalIncomeUsedDisplay').textContent = formatCurrency(totalIncomeUsed);
+            
+            const remainingEl = document.getElementById('totalRemainingDisplay');
+            remainingEl.textContent = formatCurrency(totalRemaining);
+            remainingEl.classList.remove('text-green-600', 'text-red-600', 'text-amber-700');
+            remainingEl.classList.add(totalRemaining >= 0 ? 'text-green-600' : 'text-red-600');
+            
             const distributionDisplay = document.getElementById('totalDistributionDisplay');
             const distributionBar = document.getElementById('distributionBar');
             
