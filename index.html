@@ -272,9 +272,15 @@
 
         <!-- Histórico de Gastos -->
         <section class="bg-white rounded-lg border border-slate-200 shadow-sm p-6 mb-6 animate-slide-in">
-            <div class="flex items-center space-x-3 mb-4">
-                <i data-lucide="history" class="text-slate-600" size="24"></i>
-                <h2 class="text-xl font-bold text-slate-800">Histórico Recente</h2>
+            <div class="flex items-center justify-between mb-4 flex-wrap gap-2">
+                <div class="flex items-center space-x-3">
+                    <i data-lucide="history" class="text-slate-600" size="24"></i>
+                    <h2 class="text-xl font-bold text-slate-800" id="expenseHistoryTitle">Histórico Recente</h2>
+                </div>
+                <button type="button" id="clearExpenseFilterBtn" class="hidden text-sm text-slate-600 hover:text-slate-800 font-medium flex items-center space-x-1">
+                    <i data-lucide="x" size="16"></i>
+                    <span>Ver todos</span>
+                </button>
             </div>
             
             <div id="expenseHistory" class="space-y-3">
@@ -694,6 +700,9 @@
             expenses: []
         };
 
+        // Filtro do histórico: null = todos, ou id do potinho
+        let expenseFilterPotId = null;
+
         // Carregar do LocalStorage
         function loadState() {
             const saved = localStorage.getItem('moneyPotsApp');
@@ -791,8 +800,14 @@
                     alertMessage = '<div class="bg-amber-600 text-white px-3 py-1.5 rounded text-xs font-medium flex items-center"><i data-lucide="alert-circle" size="14" class="mr-1"></i> Atenção: 90%</div>';
                 }
 
+                const isFilterActive = expenseFilterPotId === pot.id;
                 const card = document.createElement('div');
-                card.className = `pot-card bg-white rounded-lg border p-5 ${alertClass} fade-in shadow-sm`;
+                card.className = `pot-card bg-white rounded-lg border p-5 ${alertClass} fade-in shadow-sm cursor-pointer ${isFilterActive ? 'ring-2 ring-slate-600 ring-offset-2' : ''}`;
+                card.title = 'Clique para ver apenas os gastos deste potinho';
+                card.addEventListener('click', (e) => {
+                    if (e.target.closest('button')) return;
+                    filterExpensesByPot(pot.id);
+                });
                 card.innerHTML = `
                     <div class="flex items-center justify-between mb-4">
                         <div class="flex items-center space-x-3">
@@ -802,7 +817,7 @@
                                 <p class="text-xs text-slate-500">${pot.percentage}% da renda</p>
                             </div>
                         </div>
-                        <button onclick="editPot('${pot.id}')" class="text-slate-400 hover:text-slate-600 transition">
+                        <button type="button" onclick="event.stopPropagation(); editPot('${pot.id}')" class="text-slate-400 hover:text-slate-600 transition p-1">
                             <i data-lucide="edit-2" size="18"></i>
                         </button>
                     </div>
@@ -848,19 +863,40 @@
             });
         }
 
+        // Filtrar histórico por potinho (clique no card). Clicar de novo no mesmo potinho remove o filtro.
+        function filterExpensesByPot(potId) {
+            expenseFilterPotId = expenseFilterPotId === potId ? null : potId;
+            renderExpenseHistory();
+            renderPots();
+            lucide.createIcons();
+        }
+
         // Renderizar histórico
         function renderExpenseHistory() {
             const container = document.getElementById('expenseHistory');
-            
-            if (state.expenses.length === 0) {
-                container.innerHTML = '<p class="text-slate-500 text-center py-8">Nenhum gasto registrado ainda.</p>';
+            const titleEl = document.getElementById('expenseHistoryTitle');
+            const clearBtn = document.getElementById('clearExpenseFilterBtn');
+
+            const filtered = expenseFilterPotId
+                ? state.expenses.filter(e => e.potId === expenseFilterPotId)
+                : state.expenses;
+            const toShow = expenseFilterPotId ? filtered.slice().reverse() : state.expenses.slice().reverse().slice(0, 10);
+
+            if (titleEl) titleEl.textContent = expenseFilterPotId
+                ? (state.pots.find(p => p.id === expenseFilterPotId)?.name ? `Gastos: ${state.pots.find(p => p.id === expenseFilterPotId).name}` : 'Histórico')
+                : 'Histórico Recente';
+            if (clearBtn) clearBtn.classList.toggle('hidden', !expenseFilterPotId);
+
+            if (toShow.length === 0) {
+                container.innerHTML = expenseFilterPotId
+                    ? '<p class="text-slate-500 text-center py-8">Nenhum gasto neste potinho.</p>'
+                    : '<p class="text-slate-500 text-center py-8">Nenhum gasto registrado ainda.</p>';
+                lucide.createIcons();
                 return;
             }
 
             container.innerHTML = '';
-            const recent = state.expenses.slice().reverse().slice(0, 10);
-
-            recent.forEach(expense => {
+            toShow.forEach(expense => {
                 const pot = state.pots.find(p => p.id === expense.potId);
                 const item = document.createElement('div');
                 item.className = 'flex items-center justify-between p-3 bg-slate-50 rounded-lg border border-slate-100 hover:bg-slate-100/80 transition fade-in';
@@ -902,6 +938,13 @@
             } else {
                 showNotification('Digite um valor válido maior que zero!', 'error');
             }
+        });
+
+        document.getElementById('clearExpenseFilterBtn').addEventListener('click', () => {
+            expenseFilterPotId = null;
+            renderExpenseHistory();
+            renderPots();
+            lucide.createIcons();
         });
 
         // Adicionar Gasto
