@@ -3,9 +3,9 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="Organize suas finanças pessoais com a estratégia dos Potinhos - Regra 50-30-20. Controle seus gastos de forma visual e intuitiva.">
-    <meta name="keywords" content="finanças pessoais, controle financeiro, orçamento, 50-30-20, potinhos">
-    <title>Meu Dinheiro por Potinhos - Organize suas Finanças</title>
+    <meta name="description" content="Organize suas finanças pessoais com a estratégia das Categorias - Regra 50-30-20. Controle seus gastos de forma visual e intuitiva.">
+    <meta name="keywords" content="finanças pessoais, controle financeiro, orçamento, 50-30-20, categorias">
+    <title>Meu Dinheiro por Categorias - Organize suas Finanças</title>
     
     <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
@@ -118,12 +118,21 @@
                     </div>
                     <div>
                         <h1 class="text-2xl font-bold text-white tracking-tight">
-                            Meu Dinheiro por Potinhos
+                            Meu Dinheiro por Categorias
                         </h1>
                         <p class="text-slate-400 text-sm">Controle de orçamento pessoal</p>
                     </div>
                 </div>
-                <div class="flex space-x-2">
+                <div class="flex flex-wrap items-center gap-2">
+                    <input type="file" id="importFileInput" accept=".json,application/json" class="hidden">
+                    <button id="importBtn" class="bg-slate-600 hover:bg-slate-500 text-white px-4 py-2 rounded-lg flex items-center space-x-2 transition text-sm font-medium" title="Importar dados de um arquivo JSON">
+                        <i data-lucide="upload" size="18"></i>
+                        <span class="hidden md:inline">Importar</span>
+                    </button>
+                    <button id="exportBtn" class="bg-slate-600 hover:bg-slate-500 text-white px-4 py-2 rounded-lg flex items-center space-x-2 transition text-sm font-medium" title="Exportar dados em JSON">
+                        <i data-lucide="download" size="18"></i>
+                        <span class="hidden md:inline">Exportar</span>
+                    </button>
                     <button id="resetBtn" class="bg-slate-600 hover:bg-slate-500 text-white px-4 py-2 rounded-lg flex items-center space-x-2 transition text-sm font-medium" title="Reiniciar dados">
                         <i data-lucide="refresh-ccw" size="18"></i>
                         <span class="hidden md:inline">Reiniciar</span>
@@ -177,7 +186,7 @@
                     <p class="text-2xl font-bold" id="totalRemainingDisplay">R$ 0,00</p>
                 </div>
                 <div class="p-4 bg-slate-50 border border-slate-200 rounded-lg">
-                    <p class="text-xs font-medium text-slate-500 uppercase tracking-wide mb-1">Distribuição dos Potinhos</p>
+                    <p class="text-xs font-medium text-slate-500 uppercase tracking-wide mb-1">Distribuição das Categorias</p>
                     <p class="text-2xl font-bold text-slate-800" id="totalDistributionDisplay">0%</p>
                     <div class="w-full bg-slate-200 rounded-full h-1.5 mt-2">
                         <div id="distributionBar" class="h-full rounded-full transition-all bg-slate-500" style="width: 0%"></div>
@@ -186,21 +195,21 @@
             </div>
         </section>
 
-        <!-- Gerenciar Potinhos -->
+        <!-- Gerenciar Categorias -->
         <section class="bg-white rounded-lg border border-slate-200 shadow-sm p-6 mb-6 animate-slide-in">
             <div class="flex items-center justify-between mb-4">
                 <div class="flex items-center space-x-3">
                     <i data-lucide="grid-3x3" class="text-slate-600" size="24"></i>
-                    <h2 class="text-xl font-bold text-slate-800">Meus Potinhos</h2>
+                    <h2 class="text-xl font-bold text-slate-800">Minhas Categorias</h2>
                 </div>
                 <button id="addPotBtn" class="bg-slate-700 hover:bg-slate-600 text-white px-4 py-2 rounded-lg flex items-center space-x-2 transition text-sm font-medium">
                     <i data-lucide="plus-circle" size="18"></i>
-                    <span>Novo Potinho</span>
+                    <span>Nova Categoria</span>
                 </button>
             </div>
             
             <div id="potsContainer" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                <!-- Os potinhos serão renderizados aqui -->
+                <!-- As categorias serão renderizadas aqui -->
             </div>
         </section>
 
@@ -242,7 +251,7 @@
                     </div>
                 </div>
                 <div>
-                    <label class="block text-sm font-medium text-slate-700 mb-2">Potinho</label>
+                    <label class="block text-sm font-medium text-slate-700 mb-2">Categoria</label>
                     <select 
                         id="expensePot" 
                         class="w-full px-4 py-3 border border-slate-300 rounded-lg focus:border-slate-500 focus:ring-1 focus:ring-slate-500 focus:outline-none text-base h-12"
@@ -289,12 +298,12 @@
             <div class="max-w-4xl mx-auto">
                 <h2 class="text-xl font-bold text-slate-800 mb-4 flex items-center">
                     <i data-lucide="book-open" class="mr-2 text-slate-600" size="24"></i>
-                    Como funciona a estratégia dos Potinhos?
+                    Como funciona a estratégia das Categorias?
                 </h2>
                 
                 <div class="prose prose-slate text-slate-700 space-y-4 mb-6 text-sm">
                     <p>
-                        A <strong>estratégia dos Potinhos</strong> é uma metodologia simples e visual para organizar suas finanças. 
+                        A <strong>estratégia das Categorias</strong> é uma metodologia simples e visual para organizar suas finanças. 
                         Ela se baseia na famosa <strong>regra 50-30-20</strong>, que divide sua renda em três categorias principais:
                     </p>
                     
@@ -325,7 +334,7 @@
                     </div>
                     
                     <p>
-                        Aqui você pode <strong>personalizar seus potinhos</strong>, criar novos, ajustar percentuais 
+                        Aqui você pode <strong>personalizar suas categorias</strong>, criar novos, ajustar percentuais 
                         e acompanhar quanto já gastou de cada categoria.
                     </p>
                 </div>
@@ -367,16 +376,16 @@
     <!-- Footer -->
     <footer class="bg-slate-800 text-slate-300 py-5 mt-10 border-t border-slate-700">
         <div class="container mx-auto px-4 text-center">
-            <p class="text-sm">&copy; 2026 Meu Dinheiro por Potinhos — Controle de orçamento pessoal</p>
+            <p class="text-sm">&copy; 2026 Meu Dinheiro por Categorias — Controle de orçamento pessoal</p>
             <p class="text-slate-500 text-xs mt-1">Seus dados são salvos localmente no navegador</p>
         </div>
     </footer>
 
-    <!-- Modal para Editar/Criar Potinho -->
+    <!-- Modal para Editar/Criar Categoria -->
     <div id="potModal" class="hidden fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4">
         <div class="bg-white rounded-lg border border-slate-200 shadow-xl max-w-md w-full p-6 animate-slide-in">
             <div class="flex items-center justify-between mb-4">
-                <h3 class="text-xl font-bold text-slate-800" id="modalTitle">Editar Potinho</h3>
+                <h3 class="text-xl font-bold text-slate-800" id="modalTitle">Editar Categoria</h3>
                 <button id="closeModalBtn" class="text-slate-500 hover:text-slate-700">
                     <i data-lucide="x" size="22"></i>
                 </button>
@@ -386,7 +395,7 @@
                 <input type="hidden" id="potId">
                 
                 <div>
-                    <label class="block text-sm font-medium text-slate-700 mb-2">Nome do Potinho</label>
+                    <label class="block text-sm font-medium text-slate-700 mb-2">Nome da Categoria</label>
                     <input 
                         type="text" 
                         id="potName" 
@@ -420,7 +429,7 @@
                     <div id="noIncomeWarning" class="hidden bg-amber-50 border border-amber-200 rounded-lg p-3 mb-3">
                         <p class="text-sm text-amber-800 flex items-start">
                             <i data-lucide="info" size="16" class="mr-2 mt-0.5 flex-shrink-0"></i>
-                            <span>⚠️ Configure sua renda mensal primeiro para definir valores e porcentagens para os potinhos.</span>
+                            <span>⚠️ Configure sua renda mensal primeiro para definir valores e porcentagens para as categorias.</span>
                         </p>
                     </div>
                     
@@ -473,7 +482,7 @@
                     
                     <p id="percentageWarning" class="hidden text-sm text-red-600 font-semibold mt-2 flex items-center">
                         <i data-lucide="alert-triangle" size="16" class="mr-1"></i>
-                        <span>A soma dos potinhos não pode ultrapassar 100%!</span>
+                        <span>A soma das categorias não pode ultrapassar 100%!</span>
                     </p>
                 </div>
                 
@@ -535,7 +544,7 @@
                     </li>
                     <li class="flex items-start">
                         <span class="text-red-500 mr-2">✗</span>
-                        <span>Resetar todos os potinhos personalizados</span>
+                        <span>Resetar todas as categorias personalizadas</span>
                     </li>
                     <li class="flex items-start">
                         <span class="text-red-500 mr-2">✗</span>
@@ -628,7 +637,7 @@
             expenses: []
         };
 
-        // Filtro do histórico: null = todos, ou id do potinho
+        // Filtro do histórico: null = todos, ou id do categoria
         let expenseFilterPotId = null;
 
         // Carregar do LocalStorage
@@ -637,7 +646,7 @@
             if (saved) {
                 state = JSON.parse(saved);
             } else {
-                // Potinhos padrão (50-30-20)
+                // Categorias padrão (50-30-20)
                 state.pots = [
                     { id: '1', name: 'Necessidades', percentage: 50, color: 'green', icon: '🏠', spent: 0 },
                     { id: '2', name: 'Desejos', percentage: 30, color: 'blue', icon: '🎮', spent: 0 },
@@ -703,7 +712,27 @@
             }
         }
 
-        // Renderizar Potinhos
+        // Gerar paths do gráfico de pizza (0° = topo, sentido horário). Retorna paths SVG para gasto e falta.
+        function getPieChartPaths(percentSpent, r = 36, cx = 36, cy = 36) {
+            const clamp = Math.min(100, Math.max(0, percentSpent));
+            const angleSpent = (clamp / 100) * 360;
+            const angleRemaining = 360 - angleSpent;
+            const toRad = (deg) => (deg - 90) * Math.PI / 180;
+            const point = (angle) => ({
+                x: cx + r * Math.cos(toRad(angle)),
+                y: cy + r * Math.sin(toRad(angle))
+            });
+            const p0 = point(0);
+            const pSpent = point(angleSpent);
+            const p360 = point(360);
+            const largeSpent = angleSpent > 180 ? 1 : 0;
+            const largeRemaining = angleRemaining > 180 ? 1 : 0;
+            const spentPath = angleSpent <= 0 ? '' : `M ${cx} ${cy} L ${p0.x} ${p0.y} A ${r} ${r} 0 ${largeSpent} 1 ${pSpent.x} ${pSpent.y} Z`;
+            const remainingPath = angleRemaining <= 0 ? '' : `M ${cx} ${cy} L ${pSpent.x} ${pSpent.y} A ${r} ${r} 0 ${largeRemaining} 1 ${p0.x} ${p0.y} Z`;
+            return { spentPath, remainingPath };
+        }
+
+        // Renderizar Categorias
         function renderPots() {
             const container = document.getElementById('potsContainer');
             container.innerHTML = '';
@@ -713,6 +742,7 @@
                 const spent = pot.spent || 0;
                 const percentage = allocated > 0 ? (spent / allocated) * 100 : 0;
                 const remaining = allocated - spent;
+                const { spentPath, remainingPath } = getPieChartPaths(percentage);
 
                 let barColor = 'bg-slate-500';
                 let alertClass = 'border-slate-200';
@@ -731,7 +761,7 @@
                 const isFilterActive = expenseFilterPotId === pot.id;
                 const card = document.createElement('div');
                 card.className = `pot-card bg-white rounded-lg border p-5 ${alertClass} fade-in shadow-sm cursor-pointer ${isFilterActive ? 'ring-2 ring-slate-600 ring-offset-2' : ''}`;
-                card.title = 'Clique para ver apenas os gastos deste potinho';
+                card.title = 'Clique para ver apenas os gastos desta categoria';
                 card.addEventListener('click', (e) => {
                     if (e.target.closest('button')) return;
                     filterExpensesByPot(pot.id);
@@ -752,18 +782,37 @@
 
                     ${alertMessage ? '<div class="mb-3">' + alertMessage + '</div>' : ''}
 
-                    <div class="space-y-2 mb-4">
-                        <div class="flex justify-between text-sm">
-                            <span class="text-slate-600">Orçado:</span>
-                            <span class="font-bold text-slate-800">${formatCurrency(allocated)}</span>
+                    <div class="flex gap-4 mb-4">
+                        <div class="flex-shrink-0 flex flex-col items-center">
+                            <svg viewBox="0 0 72 72" width="72" height="72" class="mx-auto" aria-hidden="true">
+                                ${remainingPath ? `<path d="${remainingPath}" fill="#e2e8f0" stroke="#cbd5e1" stroke-width="1"/>` : ''}
+                                ${spentPath ? `<path d="${spentPath}" fill="${percentage >= 100 ? '#dc2626' : percentage >= 90 ? '#d97706' : '#475569'}" stroke="#334155" stroke-width="1"/>` : ''}
+                                ${!spentPath && !remainingPath ? `<circle cx="36" cy="36" r="36" fill="#e2e8f0"/>` : ''}
+                            </svg>
+                            <div class="flex items-center gap-3 mt-1.5 text-xs">
+                                <span class="flex items-center gap-1">
+                                    <span class="w-2 h-2 rounded-full ${percentage >= 100 ? 'bg-red-500' : percentage >= 90 ? 'bg-amber-500' : 'bg-slate-500'}"></span>
+                                    Gasto
+                                </span>
+                                <span class="flex items-center gap-1">
+                                    <span class="w-2 h-2 rounded-full bg-slate-300"></span>
+                                    Falta
+                                </span>
+                            </div>
                         </div>
-                        <div class="flex justify-between text-sm">
-                            <span class="text-slate-600">Gasto:</span>
-                            <span class="font-semibold text-slate-800">${formatCurrency(spent)}</span>
-                        </div>
-                        <div class="flex justify-between text-sm">
-                            <span class="text-slate-600">Restante:</span>
-                            <span class="font-bold ${remaining >= 0 ? 'text-emerald-600' : 'text-red-600'}">${formatCurrency(remaining)}</span>
+                        <div class="flex-1 min-w-0 space-y-2">
+                            <div class="flex justify-between text-sm">
+                                <span class="text-slate-600">Orçado:</span>
+                                <span class="font-bold text-slate-800">${formatCurrency(allocated)}</span>
+                            </div>
+                            <div class="flex justify-between text-sm">
+                                <span class="text-slate-600">Gasto:</span>
+                                <span class="font-semibold text-slate-800">${formatCurrency(spent)}</span>
+                            </div>
+                            <div class="flex justify-between text-sm">
+                                <span class="text-slate-600">Falta para completar:</span>
+                                <span class="font-bold ${remaining >= 0 ? 'text-emerald-600' : 'text-red-600'}">${formatCurrency(remaining)}</span>
+                            </div>
                         </div>
                     </div>
 
@@ -779,7 +828,7 @@
             lucide.createIcons();
         }
 
-        // Renderizar select de potinhos
+        // Renderizar select de categorias
         function renderPotSelect() {
             const select = document.getElementById('expensePot');
             select.innerHTML = '<option value="">Selecione...</option>';
@@ -791,7 +840,7 @@
             });
         }
 
-        // Filtrar histórico por potinho (clique no card). Clicar de novo no mesmo potinho remove o filtro.
+        // Filtrar histórico por categoria (clique no card). Clicar de novo no mesmo categoria remove o filtro.
         function filterExpensesByPot(potId) {
             expenseFilterPotId = expenseFilterPotId === potId ? null : potId;
             renderExpenseHistory();
@@ -817,7 +866,7 @@
 
             if (toShow.length === 0) {
                 container.innerHTML = expenseFilterPotId
-                    ? '<p class="text-slate-500 text-center py-8">Nenhum gasto neste potinho.</p>'
+                    ? '<p class="text-slate-500 text-center py-8">Nenhum gasto nesta categoria.</p>'
                     : '<p class="text-slate-500 text-center py-8">Nenhum gasto registrado ainda.</p>';
                 lucide.createIcons();
                 return;
@@ -900,7 +949,7 @@
             }
 
             if (!potId) {
-                showNotification('Selecione um potinho!', 'error');
+                showNotification('Selecione uma categoria!', 'error');
                 return;
             }
 
@@ -914,7 +963,7 @@
 
             state.expenses.push(expense);
 
-            // Atualizar gasto do potinho
+            // Atualizar gasto do categoria
             const pot = state.pots.find(p => p.id === potId);
             if (pot) {
                 pot.spent = (pot.spent || 0) + value;
@@ -932,7 +981,7 @@
         window.deleteExpense = function(id) {
             const expense = state.expenses.find(e => e.id === id);
             if (expense) {
-                // Remover do gasto do potinho
+                // Remover do gasto do categoria
                 const pot = state.pots.find(p => p.id === expense.potId);
                 if (pot) {
                     pot.spent = Math.max(0, (pot.spent || 0) - expense.value);
@@ -945,13 +994,13 @@
             }
         };
 
-        // Modal de Potinho
+        // Modal de Categoria
         const potModal = document.getElementById('potModal');
         let editingPotId = null;
 
         document.getElementById('addPotBtn').addEventListener('click', () => {
             editingPotId = null;
-            document.getElementById('modalTitle').textContent = 'Novo Potinho';
+            document.getElementById('modalTitle').textContent = 'Nova Categoria';
             document.getElementById('potForm').reset();
             document.getElementById('potId').value = '';
             document.getElementById('deletePotBtn').classList.add('hidden');
@@ -995,7 +1044,7 @@
             const pot = state.pots.find(p => p.id === id);
             if (pot) {
                 editingPotId = id;
-                document.getElementById('modalTitle').textContent = 'Editar Potinho';
+                document.getElementById('modalTitle').textContent = 'Editar Categoria';
                 document.getElementById('potId').value = pot.id;
                 document.getElementById('potName').value = pot.name;
                 document.getElementById('potPercentage').value = pot.percentage;
@@ -1201,7 +1250,7 @@
             lucide.createIcons();
         }
 
-        // Salvar Potinho
+        // Salvar Categoria
         document.getElementById('potForm').addEventListener('submit', (e) => {
             e.preventDefault();
 
@@ -1223,7 +1272,7 @@
             const total = usedByOthers + percentage;
             
             if (total > 100) {
-                showNotification(`A soma dos potinhos não pode ultrapassar 100%! Disponível: ${(100 - usedByOthers).toFixed(1)}%`, 'error');
+                showNotification(`A soma das categorias não pode ultrapassar 100%! Disponível: ${(100 - usedByOthers).toFixed(1)}%`, 'error');
                 return;
             }
 
@@ -1251,17 +1300,17 @@
             saveState();
             render();
             potModal.classList.add('hidden');
-            showNotification('Potinho salvo com sucesso!', 'success');
+            showNotification('Categoria salva com sucesso!', 'success');
         });
 
-        // Deletar Potinho
+        // Deletar Categoria
         document.getElementById('deletePotBtn').addEventListener('click', () => {
-            if (confirm('Tem certeza que deseja excluir este potinho? Os gastos relacionados serão mantidos.')) {
+            if (confirm('Tem certeza que deseja excluir esta categoria? Os gastos relacionados serão mantidos.')) {
                 state.pots = state.pots.filter(p => p.id !== editingPotId);
                 saveState();
                 render();
                 potModal.classList.add('hidden');
-                showNotification('Potinho excluído!', 'success');
+                showNotification('Categoria excluída!', 'success');
             }
         });
 
@@ -1327,6 +1376,64 @@
             
             // Notificação
             showNotification('Dados reiniciados com sucesso! Configuração padrão restaurada.', 'success');
+        });
+
+        // Exportar: salva o mesmo formato do storage em arquivo JSON
+        document.getElementById('exportBtn').addEventListener('click', () => {
+            const data = JSON.stringify(state, null, 2);
+            const blob = new Blob([data], { type: 'application/json' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = `meu-dinheiro-categorias-${new Date().toISOString().split('T')[0]}.json`;
+            a.click();
+            URL.revokeObjectURL(url);
+            showNotification('Dados exportados com sucesso.', 'success');
+        });
+
+        // Importar: carrega do arquivo JSON (mesma estrutura do storage)
+        document.getElementById('importBtn').addEventListener('click', () => {
+            document.getElementById('importFileInput').click();
+        });
+
+        document.getElementById('importFileInput').addEventListener('change', (e) => {
+            const file = e.target.files?.[0];
+            if (!file) return;
+            const reader = new FileReader();
+            reader.onload = () => {
+                try {
+                    const loaded = JSON.parse(reader.result);
+                    if (loaded == null || typeof loaded !== 'object') {
+                        showNotification('Arquivo inválido: estrutura esperada não encontrada.', 'error');
+                        e.target.value = '';
+                        return;
+                    }
+                    if (!Array.isArray(loaded.pots)) {
+                        showNotification('Arquivo inválido: falta o array "pots".', 'error');
+                        e.target.value = '';
+                        return;
+                    }
+                    if (!Array.isArray(loaded.expenses)) {
+                        showNotification('Arquivo inválido: falta o array "expenses".', 'error');
+                        e.target.value = '';
+                        return;
+                    }
+                    state = {
+                        income: typeof loaded.income === 'number' ? loaded.income : 0,
+                        pots: loaded.pots,
+                        expenses: loaded.expenses
+                    };
+                    saveState();
+                    expenseFilterPotId = null;
+                    render();
+                    lucide.createIcons();
+                    showNotification('Dados importados com sucesso.', 'success');
+                } catch (err) {
+                    showNotification('Arquivo JSON inválido. Verifique o formato.', 'error');
+                }
+                e.target.value = '';
+            };
+            reader.readAsText(file, 'UTF-8');
         });
 
         // Aplicar máscaras de dinheiro
